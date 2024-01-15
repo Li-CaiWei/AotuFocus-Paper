@@ -1,0 +1,1018 @@
+OpenWSI: a low-cost, high-throughput whole slide 
+imaging system via single-frame autofocusing and 
+open-source hardware 
+CHENGFEI GUO,1,4,6 ZICHAO BIAN,1,6 SHAOWEI JIANG,1,6,* MICHAEL MURPHY,3 
+JIAKAI ZHU,1 RUIHAI WANG,1 PENGMING SONG,2 XIAOPENG SHAO,1,4 YONGBING 
+ZHANG,5 AND GUOAN ZHENG,1,2 
+1Department of Biomedical Engineering, University of Connecticut, Storrs, CT, 06269, USA 
+2Department of Electrical and Computer Engineering, University of Connecticut, Storrs, CT, 06269, USA 
+3Department of Dermatology, University of Connecticut Health Center, Farmington, CT 06030, USA 
+4School of Physics and Optoelectronic Engineering, Xidian University, Shaanxi, 710071, China 
+5Graduate School at Shenzhen, Tsinghua University, Shenzhen, 518055, China 
+6These authors contributed equally to this work 
+*Corresponding author: shaowei.jiang@uconn.edu   
+Received 27 August 2019; revised 31 October 2019; accepted 22 November 2019; posted 22 November 2019 (Doc. ID 376437) 
+ 
+Recent advancements in whole slide imaging (WSI) have 
+moved pathology closer to digital practice. Existing 
+systems require precise mechanical control and the cost 
+is prohibitive for most individual pathologists. Here we 
+report a low-cost and high-throughput WSI system termed 
+OpenWSI. The reported system is built using off-the-shelf 
+components including a programmable LED array, a 
+photographic lens, and a low-cost computer numerical 
+control (CNC) router. Different from conventional WSI 
+platforms, our system performs real-time single-frame 
+autofocusing using color-multiplexed illumination. For 
+axial positioning control, we perform coarse adjustment 
+using the CNC router and precise adjustment using the 
+ultrasonic motor ring in the photographic lens. By using a 
+20X objective lens, we show that the OpenWSI system has 
+a resolution of ~0.7 µm. It can acquire whole slide images 
+of a 225-mm2 region in ~2 mins, with throughput 
+comparable to existing high-end platforms. The reported 
+system offers a turnkey solution to transform the high-
+end WSI platforms into one that can be made broadly 
+available and utilizable without loss of capacity.  
+OCIS codes: (170.0180) Microscopy; (170.4730) Optical pathology; 
+(120.4570) Optical design of instruments 
+ 
+ 
+Digital pathology via whole slide imaging (WSI) promises better and 
+faster diagnosis and prognosis of cancers and other diseases [1]. A major 
+milestone was accomplished in 2017 when the Philips’ WSI system was 
+approved for the primary diagnostic use in the US [2]. In a conventional 
+WSI system, the tissue slide is mechanically scanned to different x-y 
+positions and the digital images are acquired using a high numerical 
+ aperture (NA) objective lens. The small depth of field of the objective, 
+however, poses a challenge for proper focusing during the scanning 
+process [3, 4]. Many existing systems create a focus map prior to the 
+scanning process. For each point on the map, the system needs to scan 
+the sample to different axial positions and acquire a z-stack. The best 
+focus position can then be inferred based on the image with the highest 
+Brenner gradient or other figure of merits [5-7]. In this z-stack approach, 
+surveying the focus points for every tile would require a prohibitive 
+amount of time. Most systems select a subset of tiles for focus point 
+surveying to save time. Different from the z-stack approach, we have 
+recently demonstrated a focus map surveying method based on single-
+frame autofocusing [8, 9]. In this approach, we illuminate the sample 
+from two different incident angles. If the object is placed at an out-of-
+focus position, the captured image would contain two copies of the 
+object separated by a certain distance. The defocus distance can then be 
+recovered based on the two-copy separation.   
+In this letter, we report the development of a low-cost, high-
+throughput DIY WSI system termed OpenWSI. The reported system is 
+built using off-the-shelf components including a programmable LED 
+array, a photographic lens, and a low-cost computer numerical control 
+(CNC) router. Different from conventional platforms, our system does 
+not perform focus map surveying. Instead, it performs real-time 
+autofocusing in between two brightfield image acquisitions. Since the 
+focus map is not needed in the scanning process, mechanical 
+repeatability is not required in our design, enabling us to build a 3-axis 
+scanning platform using a low-cost CNC router. Axial positioning 
+control is critical for microscopy imaging. In the reported platform, we 
+perform coarse axial adjustment using the CNC router and precise 
+adjustment using the ultrasonic motor ring in the photographic lens. We 
+also provide the implementation protocol on controlling the ultrasonic 
+motor ring within a photographic lens. To the best of our knowledge, it 
+is the first demonstration on how to employ a photographic lens for 
+precise axial positioning. It will provide a simple yet powerful tool for 
+3D microscopy and time-lapse focus tracking. The cost of the reported 
+system is affordable to individual researchers. This contribution is 
+significant for biologists and microscopists. Experiments that were 
+typically carried out manually in single-cell level and that addressed a 
+limited field of view at a time can now be done for the entire sample in 
+an automated manner. The result from the reported system is a 
+comprehensive digital rending of the entire sample, on the order of 
+centimeter in size, and visible at sub-micron resolution. Image analysis 
+techniques, routines, and tools can then be for quantitative post-
+acquisition data analysis, which extracts important experimental 
+information in a statistical manner. 
+Figure 1(a) shows the design of the OpenWSI system, where a Nikon 
+20X, 0.75 NA objective lens is used in this prototype setup. Instead of 
+using a conventional microscope tube lens, we employ a Canon 100-mm 
+photographic lens in our platform. This photographic lens allows us to 
+perform precise axial positioning control and the cost is also lower 
+compared to the conventional microscope tube lens. We use an 8 by 8 
+programmable LED array for sample illumination and a 20-megapixel 
+camera for image acquisition (Sony IMX 183 sensor). The LED array 
+allows us to switch between the regular brightfield imaging mode and 
+the color-multiplexed autofocusing mode. Other more advanced 
+microscopy techniques such as Fourier ptychographic microscopy, 
+phase-contrast, and 3D tomographic imaging [10-13] can also be 
+implemented using this design. The measured resolution of our 
+prototype system is ~0.7 µm using a USAF target (resolving group 10, 
+element 4 with a 0.35 µm half-pitch line width). Figure 1(b) shows the 
+components in the OpenWSI design and Fig. 1(c) shows the system 
+integration (Visualization 1). In our design, we modify a low-cost CNC 
+router (Mysweety CNC router, Amazon) for 3D sample positioning. 
+Figure 1(b1)-(b2) show the x- and y-scanning stages. In Fig. 1(b3), a 
+kinematic mount (Thorlabs KC1-T) is used to hold the objective lens and 
+enables precise angular alignment with respect to the sample stage. In 
+Fig. 1(b4), the motor driver of CNC router is connected to an Arduino 
+board that communicates with the computer via series commands.   
+One innovation of the reported system is to perform remote focus 
+control at the image plane. Figure 2(a) shows the captured images by 
+ tuning the ultrasonic motor ring to different positions (Visualization 2). 
+Figure 2(b) shows the measured calibration curve between the ring 
+positions and the defocus positions of the sample. In this experiment, we 
+use a precise mechanical stage (ASI LS-50) to mount the objective lens. 
+For different ring motor positions, we use the precise mechanical stage 
+to move the objective lens back to the in-focus position. Based on this 
+calibration curve, we can see that one step of the lens ring rotation 
+corresponds to an 8-µm axial shift at the image plane and an 80-nm shift 
+at the object plane. 
+ 
+Fig. 2. (Visualization 2) Precise image-plane focus control via the ultrasonic 
+motor ring within the photographic lens. (a) The captured images at different 
+ring positions. (b) The measured calibration curve between the ring positions 
+and the defocus positions.   
+There are two advantages of using this strategy for microscopy 
+imaging. First, for many biomedical experiments, axially moving the 
+stage or the objective lens may perturb the sample. The reported scheme 
+is able to avoid potential mechanical perturbation during the experiment. 
+Second, due to the magnification of the optical system, the precision 
+needed for image-plane focus control is 100 times lower than that for 
+ 
+Fig. 1. (Visualization 1) OpenWSI: a low-cost, high-throughput whole slide imaging system with open-source hardware. (a) The OpenWSI prototype with a 
+programmable LED array, a low-cost CNC router, and a Canon photographic lens. We perform real-time autofocusing using red / green LED illumination. 
+Mechanical repeatability is not required in our design, allowing us to build the scanning platform under a $200 budget. The stages for mechanical scanning in 
+the x- (b1), and y-directions (b2). (b3) Axial positioning using the CNC router and the ultrasonic motor ring. (b4) The CNC controller and the Arduino board 
+for communication with the computer. (c) System integration.  
+object-plane focus control. It, thus, allows us to employ a cost-effective 
+photographic lens for 3D imaging and precise focus tracking. 
+In the OpenWSI system, we perform single-frame autofocusing using 
+a programmable LED array for sample illumination. We note that no 
+condenser lens is needed in between the LED array and the sample. For 
+regular brightfield imaging, the illumination NA of the LED array is 
+matched to that of the objective [12]. For single-frame autofocusing, we 
+turn on a red and a green LED to illuminate the sample from two 
+different incident angles (Fig. 1(a)). If the sample is placed at an out-of-
+focus position, there would be a separation between the red and green 
+channels of the sample (Fig. 3(a1) and 3(a3)). Our autofocusing scheme 
+is to identify the separation between the red and green channels and then 
+recover the defocus distance based on this separation. We choose red and 
+green colors because they generate better contrast for regular 
+hematoxylin and eosin (H&E) stained tissue slides. We use an 
+illumination NA of ~0.4 for red and green LED illuminations. A larger 
+illumination NA leads to a larger image difference between the red and 
+green channels. A smaller illumination NA, on the other hand, leads to a 
+smaller separation of the two copies.     
+Figure 3(a) shows the captured images under red and green 
+illumination. Figure 3(b) shows the measured calibration curve between 
+the two-copy separation and the lens ring position. We use a gradient 
+descent optimization process to recover the separation between the red 
+and green channels shown in Fig. 3(a1) and 3(a3). This optimization 
+process calculates the gradient of the mutual information metric in the 
+direction of the extrema in each loop [14]. We sample ~10,000 pixels in 
+the captured images and use 5-10 loops for the optimization process. The 
+time to converge is ~0.05 seconds. We have also tested the autofocusing 
+performance on 1500 tiles of 5 different samples. The averaged focusing 
+error is ~0.33 µm.  
+  
+Fig. 3. Single-frame autofocusing scheme. (a) Captured images under red and 
+green LED illumination. The separation of the red and green copies can be 
+used to recover the defocus position of the sample. (b) The calibration curve 
+between the two-copy separation and the lens ring position.  
+ 
+Fig. 4. Reducing system vibration via the isolation pad. The R/G and 
+corresponding brightfield images captured at 0.2 s (a) and 0.4 s (b) after the 
+actuation of the y stage, with no isolation pad. (c) The images captured at 0.2 
+s after the actuation of the y stage, with the isolation pad.   
+ In the reported system, another critical consideration is to enable fast 
+stage actuation. Fast stage actuation, however, would lead to vibration of 
+the system and generate errors for defocus distance calculation. Figure 
+4(a) shows the captured R/G image at 0.2 s after the actuation of the y 
+stage. The vibration leads to some random motion blur in Fig. 4(a). The 
+resulting defocus distance calculation is, thus, not correct, and the 
+captured brightfield image is out-of-focus. Figure 4(b) shows the images 
+captured at 0.4 s after the stage actuation. In this case, the vibration has 
+been settled down and the resulting defocus distance calculation is 
+correct for the brightfield image. In our implementation, we reduce the 
+vibration by placing a Sorbothane isolation pad under the y-scanning 
+stage in Fig. 1(b2). With this isolation pad, the vibration has been 
+significantly reduced. Figure 4(c) shows the captured R/G and 
+brightfield images at 0.2 s after the stage actuation. 
+ 
+Fig. 5. Robustness to the motion blur along the y-direction. The captured red 
+(a1) and green channels (a2) at the static state. The cases with 100-pixel 
+motion blur (b), and 500-pixel motion blur (c). The measured two-copy 
+separation for 100-pixel motion blur (d) and 500-pixel motion blur (e).  
+ 
+Fig. 6. (Visualization 3) Operation procedures for the OpenWSI platform. In 
+between two static brightfield image acquisitions (a1) and (a3), we perform 
+autofocusing with continuous y-stage motion (a2).        
+The autofocusing method employed in the reported system is not 
+sensitive to the motion blur along the y-direction, which is perpendicular 
+to the direction of two-copy separation. Figures 5(a-c) show the red and 
+green channel images with 0-, 100-, and 500-pixel motion blurs. Figure 
+5(d) and 5(e) show that the recovered defocus positions are in a good 
+agreement with the calibration curve under the y-motion blurs.  
+Figure 6 and Visualization 3 show the operation procedure for WSI, 
+where we perform autofocusing with continuous y-stage motion (Fig. 
+6(a2)). This autofocusing process is performed in between two static 
+brightfield image acquisitions in Fig. 6(a1) and 6(a3).  
+In our system, there are minor pincushion distortions at the edge of the 
+captured image (image magnification slightly increases with the distance 
+from the center). The pincushion distortions lead to stitching errors in Fig. 
+7(a). We use the following procedures to digitally correct the pincushion 
+distortions. First, we use a hole-array mask to measure the pincushion 
+distortion. Inset of Fig. 7(a) shows the distorted hole positions and the 
+corresponding ground-truth positions. Second, we create a mapping 
+equation to map the distorted hole positions to the ground-truth positions 
+(inset of Fig. 7(b)). Third, the mapping equation is applied to the captured 
+brightfield image. The processing time for distortion correction is ~0.13 
+s for each image and it can be implemented in parallel with the image 
+acquisition process. Figure 8 shows a sample whole slide image captured 
+using the reported platform. The lens ring position over the entire field 
+of view is shown in Fig. 8(a) and the whole slide image is shown in Fig. 
+8(b). The acquisition time for this 10 mm by 11 mm sample image is 63 
+s (Visualization 3). For a 225-mm2 area, the acquisition time is ~2 mins 
+and the imaging throughput is comparable to existing high-end platforms.             
+ 
+Fig. 7. Pincushion distortion correction. (a) Image stitching errors due to 
+pincushion distortion. (b) No errors after digital distortion correction.         
+ 
+Fig. 8. Testing the OpenWSI system for whole slide imaging. (a) The 
+generated focus map during the scanning process. (b) The captured whole 
+slide image of a kidney cancer section. The acquisition time is 63 s for this 11 
+mm by 10 mm sample. We use ImageJ Fiji plugin for image stitching (refer 
+to http://www.gigapan.com/gigapans/218291).        
+In summary, we report a low-cost, high-throughput WSI system 
+termed OpenWSI. It offers a turnkey solution to transform the high-end 
+WSI platforms into one that can be made broadly available and utilizable 
+without loss of capacity. From the technology point of view, the reported 
+system has several advantages compared to conventional WSI systems. 
+1) It employs a real-time autofocusing strategy that allows the system to 
+be built with a low-cost CNC router. The autofocusing process can be 
+performed with continuous sample motion. 2) It performs remote focus 
+control at the image plane via the ultrasonic motor ring. This strategy 
+allows us to employ a cost-effective photographic lens for 3D imaging 
+ and rapid focus tracking. 3) Multiple modalities such as phase-contrast, 
+Fourier ptychographic, and 3D tomographic imaging can also be 
+integrated into the reported system via the LED array. One future 
+direction is to integrate the reported platform with an automatic slide 
+loading system. 
+From the application point of view, the impacts of the reported 
+platform are far-reaching as high-content images are desired in many 
+fields of biomedical research as well as in clinical applications. The 
+dissemination of the proposed platform in an affordable budget for 
+individual researchers could lead to new types of experimental designs 
+in small labs. In the medical realm, one strategy taken by the National 
+Cancer Moonshot initiative to fight cancer cooperatively is to create an 
+image database for different cases and connect scientists and pathologists 
+for online collaboration. Such a database would allow researchers to find 
+similarities in cancer and perform tissue driven data mining to find a cure. 
+Converting the tissue sections and various biological samples into high-
+content images is the first step in this strategy. The reported OpenWSI 
+platform holds the potential to address the challenges of high-throughput 
+imaging and allow individual pathologists to use the WSI system.    
+The following 7 files for the OpenWSI system can be downloaded at 
+[15]: 1) part list, 2) instruction on customized parts, 3) focus control of 
+the Canon lens, 4) resolution test, 5) digital distortion correction, 6) 3D 
+design files, and 7) demo code.   
+ 
+Funding.  This work is supported by the UConn SPARK fund. 
+ 
+Disclosures. G. Z. has conflicts of interest with Pathware and Instant 
+Imaging Technology, which did not support this work.  
+ 
+References 
+1. F. Ghaznavi, A. Evans, A. Madabhushi, and M. Feldman, Annual 
+Review of Pathology: Mechanisms of Disease 8, 331-359 (2013). 
+2. E. Abels and L. Pantanowitz, Journal of Pathology Informatics 8, 23-
+23 (2017). 
+3. R. R. McKay, V. A. Baxi, and M. C. Montalto, Journal of pathology 
+informatics 2, 38 (2011). 
+4. M. C. Montalto, R. R. McKay, and R. J. Filkins, Journal of pathology 
+informatics 2(2011). 
+5. S. Yazdanfar, K. B. Kenny, K. Tasimi, A. D. Corwin, E. L. Dixon, 
+and R. J. Filkins, Optics express 16, 8670-8677 (2008). 
+6. A. Santos, C. Ortiz de Solórzano, J. J. Vaquero, J. Pena, N. Malpica, 
+and F. Del Pozo, Journal of microscopy 188, 264-272 (1997). 
+7. F. C. Groen, I. T. Young, and G. Ligthart, Cytometry: The Journal of 
+the International Society for Analytical Cytology 6, 81-91 (1985). 
+8. J. Liao, Y. Jiang, Z. Bian, B. Mahrou, A. Nambiar, A. W. Magsam, K. 
+Guo, S. Wang, Y. k. Cho, and G. Zheng, Opt. Lett. 42, 3379-3382 (2017). 
+9. S. Jiang, Z. Bian, X. Huang, P. Song, H. Zhang, Y. Zhang, and G. 
+Zheng, Quantitative Imaging in Medicine and Surgery 9, 823-831 
+(2019). 
+10. G. Zheng, R. Horstmeyer, and C. Yang, Nature photonics 7, 739 
+(2013). 
+11. K. Guo, S. Dong, and G. Zheng, IEEE Journal of Selected Topics in 
+Quantum Electronics 22, 77-88 (2015). 
+12. G. Zheng, C. Kolner, and C. Yang, Opt. Lett. 36, 3987-3989 (2011). 
+13. K. Guo, Z. Bian, S. Dong, P. Nanda, Y. M. Wang, and G. Zheng, 
+Biomed. Opt. Express 6, 574-579 (2015). 
+14. T. Gaens, F. Maes, D. Vandermeulen, and P. Suetens, International 
+Conference on Medical Image Computing and Computer-Assisted 
+Intervention, (Springer, 1998), 1099-1106. 
+15. figshare.com/articles/OpenWSI/10820516 
+
+
+
+
+
+
+
+
+
+
+
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4651
+Brightfield, fluorescence, and phase-contrast
+whole slide imaging via dual-LED autofocusing
+CHENGFEI GUO,1,2,5 ZICHAO BIAN,2,5 SOLIMAN
+ALHUDAITHY,2,3,5 SHAOWEI JIANG,2 YUJI TOMIZAWA,2 PENGMING
+SONG,4 TIANBO WANG,2 AND XIAOPENG SHAO1,*
+1Xi’an Key Laboratory of Computational Imaging, Xidian University, Shaanxi, 710071, China
+2Department of Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA
+3Department of Biomedical Technology, King Saud University, Riyadh, 12372, Saudi Arabia
+4Department of Electrical and Computer Engineering, University of Connecticut, Storrs, CT 06269, USA
+5These authors contribute equally to this work
+*xpshao@xidian.edu.cn
+Abstract: Whole slide imaging (WSI) systems convert the conventional biological samples into
+digital images. Existing commercial WSI systems usually require an expensive high-performance
+motorized stage to implement the precise mechanical control, and the cost is prohibitive for most
+individual pathologists. In this work, we report a low-cost WSI system using the off-the-shelf
+components, including a computer numerical control (CNC) router, a photographic lens, a
+programmable LED array, a fluorescence filter cube, and a surface-mount LED. To perform
+real-time single-frame autofocusing, we exploited two elements of a programmable LED array to
+illuminate the sample from two different incident angles. The captured image would contain
+two copies of the sample with a certain separation determined by the defocus distance of the
+sample. Then the defocus distance can be recovered by identifying the translational shift of the
+two copies. The reported WSI system can reach a resolution of ∼0.7 µm. The time to determine
+the optimal focusing position for each tile is only 0.02 s, which is about an 83% improvement
+compared to our previous work. We quantified the focusing performance on 1890 different tissue
+tiles. The mean focusing error is ∼0.34 µm, which is well below the ± 0.7 µm depth of field
+range of our WSI system. The reported WSI system can handle both the semitransparent and the
+transparent sample, enabling us to demonstrate the implementation of brightfield, fluorescence,
+and phase-contrast WSI. An automatic digital distortion correction strategy is also developed to
+avoid the stitching errors. The reported prototype has an affordable cost and can make it broadly
+available and utilizable for individual pathologists as well as can promote the development of
+digital pathology.
+© 2021 Optical Society of America under the terms of the OSA Open Access Publishing Agreement
+1. Introduction
+Pathologists generally use a conventional optical microscope to analyze the pathology slide.
+In the routine diagnostic process, to view a feature of tissue clearly, the pathologists need to
+manually adjust the focus knob of the microscope platform to reach the focusing plane of the slide.
+Then it also needs to manually move the microscope stage to different positions to view regions
+of interest. This traditional slide reviewing process is labor-intensive and has low workflow
+efficiency, which is an unignored disadvantage, especially in diagnosing a large number of tissue
+slides [1]. To reduce the demand for labor and better understand the biological mechanisms
+of the disease process, a WSI system is designed to replace the traditional microscope. The
+WSI, also known as virtual microscopy, refers to scanning a conventional tissue slide to create
+a high-resolution digital image. The digital image of the slide then can be efficiently viewed,
+analyzed, stored, and shared with other pathologists.
+#428196 https://doi.org/10.1364/BOE.428196
+Journal © 2021 Received 19 Apr 2021; revised 10 Jun 2021; accepted 20 Jun 2021; published 6 Jul 2021
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4652
+A typical WSI system uses a high numerical aperture (NA) objective lens to capture the
+high-resolution digital image. Due to the use of a high NA objective lens, the range of depth
+of field of the WSI system is typically on the micron level, posing a challenge for accurate
+focusing during the scanning process [2,3]. Currently existed autofocusing techniques can be
+roughly categorized into three groups: 1) pre-scan focus map, 2) real-time reflective autofocusing,
+and 3) real-time image-based autofocusing [1]. Creating a focus map prior to the scanning
+process is commonly used in many commercial WSI systems. For each point on the map, it is
+necessary to acquire a z-stack by scanning the sample to different axial positions. Then the best
+focus position can be inferred based on the optimal figures of merit [4–6]. However, surveying
+the focus positions for every tile of the tissue slide would consume a lot of time. Besides, a
+mechanical system with high positional accuracy and repeatability is required in the process of
+surveying focus map, which will magnify the cost of the entire WSI system. The reflective-based
+autofocusing technique can correct the focus drift of the system by repetitively find the axial
+location of the reference plane and maintain a constant distance between the objective lens and
+the reference plane [7–10], but it does not work well when a sample varies its location from
+the surface due to the natural property of the tissue topography variations above the glass [3].
+Real-time image-based autofocusing approaches without the need of generating the focus map
+and can handle the sample with varied topography, including 1) independent dual sensor scanning
+[2], 2) beam splitter array [11], 3) titled sensor [12], 4) phase-detection [13–15], 5) deep learning
+approaches [16–21] and 6) dual-LED illumination [22–26]. The first four autofocusing methods
+rely on an additional optical path with different sensor configurations to acquire the image for
+tracking the defocus distance of the sample. The requirement of additional optical hardware can
+cause alignment issue and make the system more complicated, and it also does not address the cost
+issue. Deep learning-based approaches allow single-frame autofocusing and require no additional
+optical hardware, but the relatively short focusing range and the need of a new train for different
+specimens that have not been trained before may limit its ability in a real application. Dual-LED
+illumination-based autofocusing methods 1) can enable real-time single-frame autofocusing
+[22,23,26], 2) can be performed with continuous sample motion [24,25], 3) can be implemented
+with cost-effective design [26]. However, they also have many issues, including 1) require an
+additional camera and optical hardware [22,24], 2) time-consuming for focus map surveying [25],
+3) cannot work with transparent samples [23,26]. Some commercial WSI systems only work for
+brightfield mode, and it has bad performance for the transparent or low-contrast sample. A few
+commercial WSI systems work for both the brightfield and fluorescence imaging modes, but the
+cost is prohibitive for some individual pathologists.
+Our recent work reported a cost-effective and high-throughput whole slide imaging system
+based on single-frame autofocusing and color-multiplexed illumination [26]. We used a red and
+a green LED to illuminate the sample to generate the translational shift between the camera’s red
+and green channels. The gradient of the mutual information metric is utilized to identify this
+translational shift and then recover the defocus distance of the sample. Compared to the previous
+work, there are four key improved points in this work. First, different from our previous work
+which could only perform brightfield WSI, the reported WSI system could work for brightfield,
+fluorescence, and phase-contrast imaging mode. In the report system, we tested Green Fluorescent
+Protein (GFP) stained sample slide and corresponding GFP filter was needed in the fluorescence
+imaging mode. The use of the filter will block the light emitted from the red LED. In order to
+avoid the light blockage, we used two green LEDs for sample illumination in the autofocusing
+process. Second, we used the autocorrelation function instead of the mutual information to
+analyze the defocus distance of the sample. The consumed time to use the autocorrelation
+function is ∼0.02 s, while the consumed time to use the mutual information is ∼0.12 s. Thus, there
+is about 83% improvement for the time to determine the optimal focusing position. Third, we set
+an offset distance to the photographic lens to handle transparent specimens before capturing each
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4653
+tile. As such, we can perform brightfield, fluorescence, and phase-contrast WSI, significantly
+improving the imaging ability compared to our previous WSI system. Fourth, we developed an
+automatic pincushion distortion correction strategy to tackle the stitching errors. The use of the
+photographic lens can cause minor pincushion distortion at the edge of the captured image. In
+the previous work, we used a hole-array mask to measure the distortion. Based on the difference
+between the distorted image captured using a photographic lens and the ground-truth image
+acquired under a standard microscope, the pincushion distortion can be corrected. This approach
+may have limitations under the conditions where a hole-array mask is hard to obtain or difficult
+to make and without a standard microscope. In our new strategy, multiple measurements of a
+specimen were captured using the reported platform, which can be used to create a ground-truth
+image as a replacement for one acquired under a standard microscope with a standard mask. Then
+the created ground-truth image can be applied to fit the distortion coefficients using a mapping
+equation. This strategy does not rely on any standard mask or microscope, while the reported
+platform can perform this correction process by itself completely.
+To merge the different merits of the existing WSI systems and avoid their disadvantage, in
+this work, we have developed a low-cost DIY WSI system based on off-the-shelf components,
+including a computer numerical control (CNC) router, a photographic lens, a programmable LED
+array, a fluorescence filter cube, and a surface-mount LED. The reported system does not need a
+second optical path or additional camera for autofocusing process, and no additional alignment is
+needed. Real-time single-frame autofocusing was performed by dynamically tracking the focus
+position of the sample in the scanning process. Since the focus map is not needed, there is no
+requirement for mechanical repeatability, allowing us to build a three-axis scanning platform
+using low-cost hardware. Our platform can handle both the semitransparent and the transparent
+sample. The brightfield, fluorescence, and phase-contrast WSI have been demonstrated. Such
+an affordable and powerful microscopy imaging tool may provide help for many individual
+pathology researchers, biologists, and microscopists.
+2. Prototype and single-frame autofocusing via dual-LED illumination
+The prototype of our low-cost WSI system is shown in Fig. 1(a). We used a Nikon 20X, 0.75
+NA objective lens, and a Canon 100 mm photographic lens to form a microscope system. The
+purpose of using the photographic lens instead of using the conventional microscope tube lens
+is to implement a precise z-axis scanning and reduce the cost of the system. A color camera
+was used for brightfield imaging, and a monochrome camera was used for fluorescence and
+phase-contrast imaging (DFK 33UX183 and DMK 33UX183, The Imaging Source). An 8 by 8
+programmable LED array (Adafruit) was used to provide sample illumination for the brightfield
+imaging, phase-contrast imaging, and autofocusing process. For the fluorescence imaging, we
+developed a plug-and-play filter cube (Fig. 1(b1)). We placed it in the region between the
+objective lens and tube lens (infinity space) to form the episcopic illumination configuration. We
+designed 3D-printed parts to connect the fluorescence filter cube with an externally threaded
+coupler (Thorlabs CMT10) and used a locking ring to fix the position of this coupler. Then we
+can thread this coupler into a compatible lens tube (SM2A6, Thorlabs) attached to the front of the
+photographic lens. With such a design, on the one hand, we can fix the position of the fluorescence
+filter cube and make it vibration-free in the sample scanning process. On the other hand, it
+is easy to take it out when performing brightfield acquisition. Replacing other fluorescence
+filter cubes with different working wavelengths is also easy to perform. A surface-mount white
+LED (XLamp CXB2540, CREE) was attached to a heatsink and was used as the illuminator for
+fluorescence imaging (Fig. 1(b2)). A cooling fan was positioned at the back of the surface-mount
+LED, and a 50-mm Nikon photographic lens (f/1.8D, as a collector) was used to build up the
+fluorescence illumination path (Fig. 1(b3)). A low-cost CNC router (Mysweety CNC router kits,
+Amazon) was modified for 3D sample positioning in our prototype. We performed coarse axial
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4654
+adjustment using the CNC router and precise adjustment using the ultrasonic motor ring. The
+motor of the CNC router is driven by an Arduino board that can communicate with the computer
+via serial commands. It is worth noting that we have placed a Sorbothane isolation pad under the
+y-scanning stage to significantly reduce the vibration caused by the fast stage actuation (Fig. 1(c)).
+We tested the system resolution using a USAF target, and it can resolve group 10, element 4 with
+0.35 µm half-pitch line width.
+Fig. 1. (a) The low-cost brightfield, fluorescence, and phase-contrast WSI system prototype.
+The inset is an extended view of the fluorescence filter cube. (b1) A fluorescence filter
+cube and the designed 3D-printed parts constitute a plug-and-play component, and it can
+be easily replaced by threading in or out from an SM1-threaded lens tube. (b2) Surface
+mounted white LED. An e-switch MOSFET module was connected to the Arduino board to
+quickly turn on or off the surface-mount LED. (b3) Fluorescence illumination path. The
+surface-mount LED was placed at the back focal plane of a Nikon photographic lens, and a
+cooling fan was attached back of the surface-mount LED to remove heated air. (c) System
+integration to give more details about the prototype.
+If the sample is placed at an out-of-focus position, the captured image would contain two
+copies of the sample (Fig. 2(a1)). The translational shift between these two copies is proportional
+to the defocus distance (Fig. 2(b1)-(b3)). The used autofocusing scheme is to identify this
+translational shift and then recover the defocus distance based on it. As shown in Fig. 2(a2),
+we calculated the autocorrelation of the image with two copies, and the separation x0 can be
+recovered from the distance between the two first-order peaks in Fig. 2(a3). Figure 2(c1) shows
+the relationship between the translational shift of the two copies and the lens ring position. Once
+we identify the translational shift between the two copies, we can recover the corresponding
+lens ring position based on the curve in Fig. 2(c1). To infer the real defocus distance, we also
+measured the calibration curve between the lens ring positions and the defocus positions of
+the sample (Fig. 2(c2)). In this calibration process, we mounted the objective lens to a precise
+mechanical stage (ASI LS-50). Then, we moved the ultrasonic motor to different positions and
+moved the objective lens back to the in-focus position using the precise mechanical stage. We
+set an illumination NA to be ∼0.4. Although a larger illumination NA leads to a larger distance
+between the two copies, the content of the two copies will also vary with a large illumination
+angle. The 0.4 illumination NA is an appropriate compromise in our setting. An important point
+is that we set an offset distance for the Canon photographic lens before each autofocusing process.
+When the transparent sample is near the in-focus position, the contrast of the captured image
+is low, and the distance between the two copies is also small. In this case, the two first-order
+peaks of the autocorrelation would not show an obvious local maximum point. It results in being
+difficult to identify the translational shift between two copies correctly. In our implementation,
+we moved the ultrasonic motor ring to a pre-defined position to generate out-of-focus contrast for
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4655
+the transparent sample; in other words, when the sample is in focus, there still have a translational
+shift of two copies (Fig. 2(b2)).
+Fig. 2. Single-frame autofocusing schema via dual-LED illumination. (a1) The captured
+image with two copies of a sample. (a2) Autocorrelation function of (a1). (a3) The line
+trace of the (a2) and the locations of the two peaks. (b1)-(b3) The captured images when
+the ultrasonic motor ring at different positions. The defocus distance can be recovered
+according to the translational shift between the two copies. (c1) The calibration curve
+between the two-copy separation and the lens ring position (the three color data points in
+(c1) correspond to the cases of (b1)-(b3)). (c2) The measured calibration curve between the
+lens ring positions and the defocus distances.
+3. Autofocusing performance and automatic digital distortion correction
+3.1. Autofocusing performance
+To quantify the autofocusing performance of the reported scheme, we tested 5 different samples.
+For each sample, we tested 18 different sample positions. At each sample position, we acquired a
+z-stack of −10 µm to +10 µm with a step of 1 µm. The corresponding lens ring position is from
+100 to 360 with a step of 13 (21 defocused positions in total). The in-focus position of the sample
+is determined based on an 11-point Brenner gradient method. We calculated the defocus distance
+of each tile based on the reported approach. The total amount of tested tiles is 1890 (5×18×21).
+As shown in Fig. 3, the mean focusing error is ∼0.34 µm, which is well below the ± 0.7 µm depth
+of field range.
+3.2. Automatic digital distortion correction
+In our reported system, the use of a photographic lens introduces minor pincushion distortions,
+leading to stitching errors shown in Fig. 4(a). To correct this distortion, previously, we used
+the standard microscope to capture an image of a hole-array mask to measure the pincushion
+distortion [26]. Then we corrected each captured image based on this measurement. Although
+this approach can address stitching errors in our design, the need of a hole-array mask and
+standard microscope may be prohibitive in some limited conditions, such as a hole-array mask is
+hard to get or without a standard microscope. Here, we developed an automatic digital distortion
+correction strategy to correct the pincushion distortion in our platform. This process does not
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4656
+Fig. 3. The autofocusing performance of the reported scheme. 5 different samples in total
+1890 tiles were tested. The different stained and unstained samples are included. The average
+focusing error is ∼0.34 µm, which is well below the ± 0.7 µm depth of field range.
+need any standard mask (like a hole-array) or microscope to measure the distortion, while all
+correction steps can be completed by using the reported platform itself. The key point to replace
+the hole-array and standard microscope is to acquire a ground-truth image with respect to the
+captured distorted image. According to the experiment result in our previous work and our best
+knowledge, the pincushion distortion mainly affect the quality at the edge of the captured image.
+Therefore, the central area of the distorted image is equivalent to one captured under a standard
+microscope. By stitching central areas of different distorted images, we can obtain a ground-truth
+image. As such, we can fit the distortion coefficients and apply them to correct the distortion
+of each raw captured image. In Fig. 4, we demonstrated the stitching performance with and
+without the reported distortion correction process. We can see that the stitching errors have been
+eliminated after performing distortion correction. The details can be found in Supplement 1, and
+we also open source the MATLAB code for use by interested readers [27].
+Fig. 4. Pincushion distortion correction. (a) Image stitching errors due to pincushion
+distortion. (b) No stitching errors after digital distortion correction.
+4. Brightfield, fluorescence and phase-contrast WSI
+Figure 5 shows the different imaging modes of our system. We took out the fluorescence filter cube
+and used the color camera for brightfield acquisition, as shown in Fig. 5(a). The surface-mount
+LED was turned off, and the programmable LED array was switched between the brightfield
+imaging mode and the autofocusing mode at high speed. For the fluorescence imaging, as shown
+in Fig. 5(b), the color camera was replaced by a monochrome camera for image acquisition.
+The fluorescence filter cube was placed at the infinity space of the microscope system. The
+surface-mount LED was turned on, and the LED array was used for the autofocusing. The light
+from the surface-mount LED was collected and went into the filter cube. It was then filtered
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4657
+by the excitation filter and was reflected onto the sample to excite out the fluorescence signal.
+The fluorescence image thus can be acquired by the microscope system. For the phase-contrast
+imaging, we used the transport of intensity equation (TIE) to recover the phase information of the
+sample [28–31]. As shown in Fig. 5(c), the surface-mount LED was turned off, and a single green
+LED was turned on for sample illumination. The Canon photographic lens can be controlled to
+move to different z-positions, then the images at the different focal planes can be captured for
+the recovery process. Figure 5(d) shows the autofocusing process that uses two green LEDs for
+sample illumination.
+Fig. 5. Different operating modes of the reported WSI system. (a) Brightfield imaging.
+The filter cube was taken out to perform brightfield acquisition. (b) Fluorescence imaging.
+The surface-mount white LED was turned on, and the LED array was turned off. The
+different filter components are labeled with different colors for distinguishment. (c) TIE
+phase-contrast imaging. A single green LED was turned on for image acquisition. The
+ultrasonic motor ring was used to drive the photographic lens to move axially. We acquired
+one focused image and one defocused image to perform TIE phase recovery. (d) The
+autofocusing process. T wo green LEDs are used for sample illumination in the autofocusing
+process.
+Figure 6 shows two brightfield whole slide images captured using the reported platform. The
+brightfield WSI workflow can be described as follows: 1) Turn on all 64 R/G/B LEDs to acquire
+a brightfield image of the sample. 2) Move the lens ring to the preset offset position and turn on
+the two green LEDs. At the same time, moving the x-y stage to the next position. 3) Acquire the
+image and identify the translational shift between the two copies of the captured image. 4) Move
+the lens ring to the in-focus position according to the shift calculated in step 3. 5) Repeat steps
+1–4. The lens ring preset offset is set to be 200, which corresponds to ∼16 µm of real defocus
+distance. The time to move the lens ring needs ∼0.15 s, and the movement of the x-y stage takes
+∼0.2 s. The autofocusing process is performed after the x-y stage is moved to the next position. It
+takes ∼0.02 s to identify the translational shift of the two copies using our desktop computer (Intel
+Core i7-7700 K, 4.2 GHz, 32GB RAM). We also summarize the timing diagram in Supplement
+1. The total time for one circle operation is ∼0.47 s. We used ImageJ to stitch together all the
+captured tiles and set ∼13% overlap between neighboring tiles [32]. Figure 6(a) shows the whole
+slide image of a human blood smear with hematoxylin and eosin (H&E) stain, and the acquisition
+time is ∼29 s for this 50-mm2 area. Figure 6(b) shows a Ki-67 with immunohistochemistry (IHC)
+brown stain, and the acquisition time is ∼20 s for this whole slide image.
+Figure 7 shows the fluorescence whole slide image of a transparent mouse kidney section. The
+operation procedures can be found in Supplement 1. The time for one circle operation is ∼0.57 s.
+For the field of view of 11 mm by 7 mm, the acquisition time is ∼60 s. In our current prototype, it
+takes ∼0.15 s to acquire one fluorescence image. Almost the whole of 0.15 s is consumed by the
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4658
+Fig. 6. Brightfield whole slide images. (a) A human blood smear with hematoxylin and
+eosin (H&E) stain. The acquisition time is ∼29 s for this 50-mm2 area. (b) A Ki-67 with
+immunohistochemistry (IHC) brown stain. The acquisition time is ∼20 s for this whole slide
+image.
+exposure process. The illuminator we used for fluorescence imaging is a type of low-cost surface
+mounted white LED, and one can choose other high-power sources to reduce the acquisition time.
+Fig. 7. The fluorescence whole slide image of a transparent mouse kidney section. The
+field of view is 11 mm by 7 mm and the acquisition time is ∼60 s.
+For the phase-contrast WSI, we used the TIE for phase recovery. We captured one focused
+image and one defocused image at each sample position. The total time for one circle operation
+is ∼0.67 s. The details of the operation procedures can be seen in Supplement 1. To save the
+operation time, we have optimized the operation procedure. We do not need to move the lens
+ring in both acquisition of the defocused image and the autofocusing image, while we only need
+to move the lens ring before acquiring the defocused image. The axial topography variation of
+the sample is not much between two neighboring tiles. There still maintain enough contrast for
+the autofocusing image. In the phase-contrast imaging, the lens ring preset offset is set to be 100,
+which corresponds to ∼8 µm of real defocus distance. We tested the mouse kidney section for the
+Fig. 8. The phase-contrast whole slide image of the mouse kidney section. The acquisition
+time is ∼69 s.
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4659
+phase-contrast WSI, as shown in Fig. 8. The acquisition time is ∼69 s for the field of view of
+11 mm by 7 mm.
+5. Conclusion
+In summary, we report a low-cost WSI system based on dual-LED autofocusing and open-source
+hardware. There are several important advantages to the reported scheme: 1) It can perform
+real-time autofocusing in between the sample scanning, and it does not need the scanning stage
+with high positional accuracy and repeatability. The acquisition time is also shorter than that
+of the focus map-based WSI platform. 2) There is no need for additional optical hardware or
+imaging sensor; thus, no additional alignment and cost is required. 3) We used the autocorrelation
+function instead of the mutual information to analyze the defocus distance of the sample. The
+consumed time to determine the optimal focusing position is ∼0.02 s, which is about an 83%
+improvement compared to our previous work. 4) We used the low-cost off-the-shelf components
+to build up our WSI system. The affordable budget of our proposed platform can make it broadly
+available and utilizable for individual pathologists or researchers. In a conventional microscopy
+imaging platform, axially moving the stage or the objective lens may perturb the sample or even
+possibly damage the sample. Our reported scheme can be able to avoid potential mechanical
+perturbation during the experiment, which is meaningful for some biomedical experiments.
+5) Our platform is able to handle both semitransparent and transparent samples, which is a
+clear advantage over other existing methods. The implementation of brightfield, fluorescence,
+and phase-contrast WSI makes our WSI system comparable to a high-end microscope. 6) To
+overcome the issue of stitching errors, we developed an automatic digital distortion correction
+strategy. In this correction process, there is no need of a standard mask or microscope to measure
+the distortion. All correction steps can be completed by using the reported platform itself.
+In the future direction, with the recent advancement of artificial intelligence (AI) in medical
+diagnosis, how to exploit AI to improve the performance of our reported WSI system deserves to
+be focused on in future research. The line of conventional microscopy, digital slide scanner, and
+automated smart microscopy is an important branch of the development of the future advanced
+technology, which will promote the research of digital pathology to a new high-level stage.
+The part list and cost estimate, focus control of the canon lens, operating procedures, and
+automatic digital distortion correction can be found in Supplement 1. The demo code for
+automatic digital distortion correction and 3D design files for this work can be downloaded at
+Dataset 1 in Ref. [27]: 1) demo code, 2) 3D design files.
+Funding. 111 project (B17035); China Scholarship Council (201806960045); National Natural Science Foundation
+of China (61975254).
+Acknowledgment. The authors would like to thank Dr. Guoan Zheng for his insightful suggestions.
+Disclosures. The authors declare no conflicts of interest.
+Data availability. Parts of code and 3D design files can be downloaded at Dataset 1 in Ref. [27]. Additional data in
+this paper may be obtained from the authors upon reasonable request.
+Supplemental document. See Supplement 1 for supporting content.
+References
+1. Z. Bian, C. Guo, S. Jiang, J. Zhu, R. Wang, P . Song, Z. Zhang, K. Hoshino, and G. Zheng, “Autofocusing technologies
+for whole slide imaging and automated microscopy,” J. Biophotonics 13(9), e202000227 (2020).
+2. R. R. McKay, V . A. Baxi, and M. C. Montalto, “The accuracy of dynamic predictive autofocusing for whole slide
+imaging,” J. Pathol. Inform. 2(1), 38 (2011).
+3. M. C. Montalto, R. R. McKay, and R. J. Filkins, “Autofocus methods of whole slide imaging systems and the
+introduction of a second-generation independent dual sensor scanning method,” J. Pathol. Inform. 2(1), 44 (2011).
+4. S. Y azdanfar, K. B. Kenny, K. Tasimi, A. D. Corwin, E. L. Dixon, and R. J. Filkins, “Simple and robust image-based
+autofocusing for digital microscopy,” Opt. Express 16(12), 8670–8677 (2008).
+Research Article Vol. 12, No. 8 / 1 August 2021 / Biomedical Optics Express 4660
+5. A. Santos, C. Ortiz de Solórzano, J. J. Vaquero, J. M. Peña, N. Malpica, and F. del Pozo, “Evaluation of autofocus
+functions in molecular cytogenetic analysis,” J. Microsc. 188(3), 264–272 (1997).
+6. F. C. A. Groen, I. T. Y oung, and G. Ligthart, “A comparison of different focus functions for use in autofocus
+algorithms,” Cytometry 6(2), 81–91 (1985).
+7. Y . Liron, Y . Paran, G. Zatorsky, B. Geiger, and Z. Kam, “Laser autofocusing for high-resolution cell biological
+imaging,” J. Microsc. 221(2), 145–151 (2006).
+8. G. Reinheimer, “Arrangement for automatically focussing an optical instrument,” US patent 3(721), 827 (1973).
+9. A. Cable, J. Wollenzin, R. Johnstone, K. Gossage, J.S. Brooker, J. Mills, J. Jiang, and D. Hillmann, “Microscopy
+system with auto-focus adjustment by low-coherence interferometry,” US Patent 9(869), 852 (2018).
+10. J. S. Silfies, E. G. Lieser, S. A. Schwartz, and M. W. Davidson, “Nikon Perfect Focus System (PFS),”
+https://www.microscopyu.com/applications/live-cell-imaging/nikon-perfect-focus-system.
+11. T. Virág, A. László, B. Molnár, A. Tagscherer, and V .S. Varga, “3DHistech KFT, 2010. Focusing method for the
+high-speed digitalisation of microscope slides and slide displacing device, focusing optics, and optical rangefinder,”
+US Patent 7(663), 078 (2010).
+12. R.T. Dong, U. Rashid, and J. Zeineh, “System and method for generating digital images of a microscope slide,” US
+Patent 10, 941 (2005).
+13. K. Guo, J. Liao, Z. Bian, X. Heng, and G. Zheng, “InstantScope: a low-cost whole slide imaging system with instant
+focal plane detection,” Biomed. Opt. Express 6(9), 3210–3216 (2015).
+14. J. Liao, L. Bian, Z. Bian, Z. Zhang, C. Patel, K. Hoshino, Y . C. Eldar, and G. Zheng, “Single-frame rapid autofocusing
+for brightfield and fluorescence whole slide imaging,” Biomed. Opt. Express 7(11), 4763–4768 (2016).
+15. L. Silvestri, M.C. Muellenbroich, I. Costantini, A.P . Di Giovanna, L. Sacconi, and F.S. Pavone, “RAPID: Real-time
+image-based autofocus for all wide-field optical microscopy systems.” bioRxiv, 170555, (2017).
+16. S. Jiang, J. Liao, Z. Bian, K. Guo, Y . Zhang, and G. Zheng, “Transform- and multi-domain deep learning for
+single-frame rapid autofocusing in whole slide imaging,” Biomed. Opt. Express 9(4), 1601–1612 (2018).
+17. Y . Rivenson, Z. Göröcs, H. Günaydin, Y . Zhang, H. Wang, and A. Ozcan, “Deep learning microscopy,” Optica 4(11),
+1437–1443 (2017).
+18. N. Dimitriou, O. Arandjelović, and P. D. Caie, “Deep learning for whole slide image analysis: an overview,” Front.
+Med. 6, 264 (2019).
+19. H. R. Tizhoosh and L. Pantanowitz, “Artificial intelligence and digital pathology: challenges and opportunities,” J.
+Pathol. Inform. 9(1), 38 (2018).
+20. H. Pinkard, Z. Phillips, A. Babakhani, D. A. Fletcher, and L. Waller, “Deep learning for single-shot autofocus
+microscopy,” Optica 6(6), 794–797 (2019).
+21. P. Chen, K. Gadepalli, R. MacDonald, Y . Liu, S. Kadowaki, K. Nagpal, T. Kohlberger, J. Dean, G. S. Corrado, J. D.
+Hipp, C. H. Mermel, and M. C. Stumpe, “An augmented reality microscope with real-time artificial intelligence
+integration for cancer diagnosis,” Nat. Med. 25(9), 1453–1457 (2019).
+22. J. Liao, Z. Wang, Z. Zhang, Z. Bian, K. Guo, A. Nambiar, Y . Jiang, S. Jiang, J. Zhong, M. Choma, and G. Zheng,
+“Dual light-emitting diode-based multichannel microscopy for whole-slide multiplane, multispectral and phase
+imaging,” J. Biophotonics 2(11), e201700075 (2018).
+23. S. Jiang, Z. Bian, X. Huang, P. Song, H. Zhang, Y . Zhang, and G. Zheng, “Rapid and robust whole slide imaging
+based on LED-array illumination and color-multiplexed single-shot autofocusing,” Quant. Imaging Med. Surg. 9(5),
+823–831 (2019).
+24. J. Liao, S. Jiang, Z. Zhang, K. Guo, Z. Bian, Y . Jiang, J. Zhong, and G. Zheng, “Terapixel hyperspectral whole-slide
+imaging via slit-array detection and projection,” J. Biomed. Opt. 23(06), 1–7 (2018).
+25. J. Liao, Y . Jiang, Z. Bian, B. Mahrou, A. Nambiar, A. W. Magsam, K. Guo, S. Wang, Y . K. Cho, and G. Zheng,
+“Rapid focus map surveying for whole slide imaging with continuous sample motion,” Opt. Lett. 42(17), 3379–3382
+(2017).
+26. C. Guo, Z. Bian, S. Jiang, M. Murphy, J. Zhu, R. Wang, P. Song, X. Shao, Y . Zhang, and G. Zheng, “OpenWSI: a
+low-cost, high-throughput whole slide imaging system via single-frame autofocusing and open-source hardware,”
+Opt. Lett. 45(1), 260–263 (2020).
+27. C. Guo, “Brightfield, fluorescence, and phase WSI,” figshare (2021), https://doi.org/10.6084/m9.figshare.12330740.
+28. C. Zuo, J. Li, J. Sun, Y . Fan, J. Zhang, L. Lu, R. Zhang, B. Wang, L. Huang, and Q. Chen, “Transport of intensity
+equation: a tutorial,” Opt. Laser Eng. 135, 106187 (2020).
+29. C. Zuo, Q. Chen, and A. Asundi, “Boundary-artifact-free phase retrieval with the transport of intensity equation: fast
+solution with use of discrete cosine transform,” Opt. Express 22(8), 9220–9244 (2014).
+30. C. Zuo, Q. Chen, H. Li, W. Qu, and A. Asundi, “Boundary-artifact-free phase retrieval with the transport of intensity
+equation ii: applications to microlens characterization,” Opt. Express 22(15), 18310–18324 (2014).
+31. C. Zuo, Q. Chen, Y . Yu, and A. Asundi, “Transport-of-intensity phase imaging using savitzky-golay differentiation
+filter-theory and applications,” Opt. Express 21(5), 5346–5362 (2013).
+32. J. Schindelin, I. Arganda-Carreras, E. Frise, V . Kaynig, M. Longair, T. Pietzsch, S. Preibisch, C. Rueden, S. Saalfeld,
+B. Schmid, J.Y . Tinevez, D. J. White, V . Hartenstein, K. Eliceiri, P . Tomancak, and A. Cardona, “Fiji: an open-source
+platform for biological-image analysis,” Nat. Med. 9(7), 676–682 (2012).
+
+
+
+
+Single-frame rapid autofocusing for brightfield 
+and fluorescence whole slide imaging 
+JUN LIAO,1 LIHENG BIAN,2 ZICHAO BIAN,1 ZIBANG ZHANG,1,3 CHARMI 
+PATEL,1 KAZUNORI HOSHINO,1 YONINA C. ELDAR,4 AND GUOAN ZHENG1,* 
+1Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA 
+2Department of Automation, Tsinghua University, Beijing 100084, China 
+3Department of Optoelectronic Engineering, Jinan University, Guangzhou 510632, China 
+4Electrical Engineering, Israel Institute of Technology, Haifa 32000, Israel 
+*guoan.zheng@uconn.edu 
+Abstract: A critical consideration for whole slide imaging (WSI) platform is to perform 
+accurate autofocusing at high speed. Typical WSI systems acquire a z-stack of sample images 
+and determine the best focal position by maximizing a figure of merit. This strategy, however, 
+has suffered from several limitations, including low speed due to multiple image acquisitions, 
+relatively low accuracy of focal plane estimation, short axial range for autofocusing, and 
+difficulties in handling transparent samples. By exploring the autocorrelation property of the 
+tissue sections, we report a novel single-frame autofocusing scheme to address the above 
+challenges. In this approach, we place a two-pinhole-modulated camera at the epi-
+illumination arm. The captured image contains two copies of the sample separated by a 
+certain distance. By identifying this distance, we can recover the defocus distance of the 
+sample over a long z-range without z-scanning. To handle transparent samples, we set an 
+offset distance to the autofocusing camera for generating out-of-focus contrast in the captured 
+image. The single-frame nature of our scheme allows autofocusing even when the stage is in 
+continuous motion. We demonstrate the use of the our autofocusing scheme for fluorescence 
+WSI and quantify the focusing performance on 1550 different tissue tiles. The average 
+autofocusing error is ~0.11 depth-of-field, 3 folds better than that of conventional methods. 
+We report an autofocusing speed of 0.037 s per tile, which is much faster than that of 
+conventional methods. The autofocusing range is ~80 µm, 8 folds longer than that of 
+conventional methods. The reported scheme is able to solve the autofocusing challenges in 
+WSI systems and may find applications in high-throughput brightfield/fluorescence WSI. 
+© 2016 Optical Society of America 
+OCIS codes: (180.0180) Microscopy; (170.0110) Imaging systems; (100.3010) Image reconstruction techniques. 
+References and links 
+1. L. Pantanowitz, J. H. Sinard, W. H. Henricks, L. A. Fatheree, A. B. Carter, L. Contis, B. A. Beckwith, A. J. 
+Evans, A. Lal, and A. V. Parwani; College of American Pathologists Pathology and Laboratory Quality Center, 
+“Validating whole slide imaging for diagnostic purposes in pathology: guideline from the College of American 
+Pathologists Pathology and Laboratory Quality Center,” Arch. Pathol. Lab. Med. 137(12), 1710–1722 (2013). 
+2. J. R. Gilbertson, J. Ho, L. Anthony, D. M. Jukic, Y. Yagi, and A. V. Parwani, “Primary histologic diagnosis 
+using automated whole slide imaging: a validation study,” BMC Clin. Pathol. 6(1), 4 (2006). 
+3. M. C. Montalto, R. R. McKay, and R. J. Filkins, “Autofocus methods of whole slide imaging systems and the 
+introduction of a second-generation independent dual sensor scanning method,” J. Pathol. Inform. 2(1), 44 
+(2011). 
+4. S. Yazdanfar, K. B. Kenny, K. Tasimi, A. D. Corwin, E. L. Dixon, and R. J. Filkins, “Simple and robust image-
+based autofocusing for digital microscopy,” Opt. Express 16(12), 8670–8677 (2008). 
+5. L. Firestone, K. Cook, K. Culp, N. Talsania, and K. Preston, Jr., “Comparison of autofocus methods for 
+automated microscopy,” Cytometry 12(3), 195–206 (1991). 
+6. R. R. McKay, V. A. Baxi, and M. C. Montalto, “The accuracy of dynamic predictive autofocusing for whole 
+slide imaging,” J. Pathol. Inform. 2(1), 38 (2011). 
+7. K. Guo, J. Liao, Z. Bian, X. Heng, and G. Zheng, “InstantScope: a low-cost whole slide imaging system with 
+instant focal plane detection,” Biomed. Opt. Express 6(9), 3210–3216 (2015). 
+8. B. D. Lucas and T. Kanade, “An iterative image registration technique with an application to stereo vision,” in 
+IJCAI, 1981), 674–679. 
+                                                                           Vol. 7, No. 11 | 1 Nov 2016 | BIOMEDICAL OPTICS EXPRESS 4763 
+#275987  
+Journal © 2016
+ http://dx.doi.org/10.1364/BOE.7.004763 
+Received 16 Sep 2016; revised 12 Oct 2016; accepted 25 Oct 2016; published 27 Oct 2016 
+9. Y. Fan, Y. Gal, and A. P. Bradley, “An algorithm for microscopic specimen delineation and focus candidate 
+selection,” Micron 66, 51–62 (2014). 
+1. Introduction 
+Whole slide imaging (WSI) systems convert the conventional microscope slides into digital 
+images that can be analyzed with computers and shared through the internet. It has become an 
+important tool in biomedical research and clinical diagnosis [1]. In WSI imaging systems, 
+autofocusing is the most challenging issue to overcome and has been cited as the culprit for 
+poor image quality in histologic diagnosis [2]. This is not because autofocusing is difficult to 
+do, but rather because of the need to perform accurate autofocusing at high speed [3]. There 
+are two types of autofocusing methods: laser-reflection-based method and image-contrast-
+based method. Laser-reflection-based method cannot handle tissue sections with topography 
+variations above the glass slide [3]. Conventional WSI systems use the image-contrast-based 
+method to perform autofocusing [3–5]. This approach typically acquires multiple images by 
+moving the sample (or the objective) along the axial direction and then selects the optimal 
+focal plane by maximizing a figure of merit on the acquired images. Typical figures of merit 
+include image contrast, resolution, entropy, and frequency content. The image-contrast-based 
+method requires no reference surface and is able to track sample topography variations above 
+the glass slide, making it a good solution for imaging tissue sections. 
+Despite its successful deployment in conventional WSI systems, the image-contrast-based 
+approach suffers from several limitations: 1) it has a limited autofocusing speed due to the 
+acquisition of multiple images per tile. Assuming a rate of 20 frames per second, surveying 
+focus at 5 different focal positions per tile requires 0.25 seconds. This will be further limited 
+by the motion of the stage in the z direction. Traditional tiling systems create a focus map by 
+surveying every n tiles on the tissue. The assumption with skipping tiles is that a neighboring 
+region has a similar focus position as its neighbors. More focus points increase the accuracy 
+of the focus map while decreasing the speed. 2) It has a relatively low accuracy of focal plane 
+estimation. It has been shown that the focusing error using a 3-point Brenner gradient method 
+is about ~0.34 depth of field (DOF) in a dynamic predictive mode [6]. 3) It has a relatively 
+short axial range for autofocusing (typically < 10 µm). If the sample is out of focus by a large 
+amount, then it is difficult for image-contrast-based methods to recover the focal position. 4) 
+Evident by its name, image-contrast-based technique relies on the image contrast of the 
+captured data. Thus, it is difficult to handle unstained, transparent, or low-contrast samples. It 
+is unclear whether image-contrast-based methods can be implemented for fluorescence 
+microscopy, where samples are typically transparent under brightfield illumination. One can 
+use a fluorescence channel for obtaining image contrast; however, capturing multiple low-
+light fluorescence images for autofocusing may be time-consuming and introduces 
+photobleaching damages to the samples. 
+In this work, we report a novel, robust, and rapid autofocusing approach based on single 
+image acquisition. Our setup integrates the dual-camera configuration [3] and the pinhole-
+modulation idea [7] to address the challenges discussed above. Different from the original 
+pinhole-modulation idea of using two images, the reported scheme only need to capture one 
+image for autofocusing. The eyepiece ports are also released for clinicians’ use. More 
+importantly, the original pinhole-modulation scheme cannot be used for fluorescence 
+imaging. The reported scheme, on the other hand, is able to handle transparent samples and be 
+used for both brightfield and fluorescence WSI. The single-frame nature of the reported 
+scheme also allows autofocusing even the stage is in continuous motion. The average 
+autofocusing error of the reported scheme is ~0.11 depth-of-field, ~3 folds better than that of 
+conventional image-contrast-based methods. The time to determine the best focus position is 
+0.037 seconds, much faster than that of conventional methods. The autofocusing range is ~80 
+µm, 8 folds longer than that of conventional methods. The reported scheme may find 
+applications in high-throughput WSI and DNA-sequencing. 
+                                                                           Vol. 7, No. 11 | 1 Nov 2016 | BIOMEDICAL OPTICS EXPRESS 4764 
+2. Single-frame rapid autofocusing scheme 
+The reported single-frame autofocusing technique is inspired by the dual-camera 
+configuration, where the high-speed camera is used for autofocusing and the main camera is 
+used for capturing high-resolution images [3]. As shown in Fig. 1(a), we placed the 
+autofocusing camera module at the epi-illumination arm. This module consists of a filter 
+cube, two 50-mm CCTV lenses, a two-pinhole aperture at the pupil plane, and a cost-effective 
+image sensor (Sony IMX265). In this setup, we used a surface-mount LED (LOHAS 50W 
+LED) for sample illumination, which was placed at the back focal plane of the condenser 
+lens. Figure 1(a3) shows the entire WSI platform, where we used three stepping motors to 
+control the motion of the microscope stage in the x, y, and z directions [7]. In the reported 
+autofocusing scheme, the light from the sample is divided into two paths by the beam splitter: 
+one goes to the high-resolution main camera at the top and the other goes to the autofocusing 
+camera. By placing the two-pinhole aperture at the pupil plane, the captured image from the 
+autofocusing camera contains two copies of the sample and the translational shift of these two 
+copies is proportional to the defocus distance (Fig. 1(b1)-1(b3)). Figure 1(b4) shows the 
+relationship between the translational shift of the two copies and the defocus distance (the 
+three color data points in Fig. 1(b4) correspond to the cases of Fig. 1(b1)-1(b3)). Once we 
+identify the translation shift between the two copies, we can recover the defocus distance 
+based on the curve in Fig. 1(b4). In our implementation, we used 2 by 2 binning for the 
+autofocusing camera and the captured image contains 1024 by 768 pixels. We used the 
+central 768 by 768 region for processing. We note that we have set up an offset for the 
+autofocusing camera in our platform; in other words, when the sample is in-focus, there is a 
+translational shift of the two copies (Fig. 1(b2)). This offset is able to generate out-of-focus 
+contrast for the transparent sample, as evident in Fig. 1(b1)-1(b3) and the inset of Fig. 1(b4). 
+We will further discuss this point below. 
+ 
+Fig. 1. The single-frame autofocusing scheme. (a) The microscope setup, where the 
+autofocusing module is attached at the epi-illumination arm. (b) The working principle of the 
+single-frame autofocusing scheme. The captured image from the autofocusing camera contains 
+two copies of the object and we can recover the defocus distance based on the translation shift 
+between the two copies. 
+The first question is how to recover the translational shift from the single captured image. 
+This problem is different from the shift retrieval problem in stereo vision, where phase 
+correlation can be calculated from two images [8]. In our case, we have one measurement 
+z[x] = s[x] + s[x - x0], where s[x] and s[x - x0] represent two copies of the sample in Fig. 1(b). 
+The goal is to recover the shift x0 from z[x] (s[x] is unknown). 
+We first rewrite z[x] as follows: z[x] = s[x] + s[x - x0] = s[x] * h[x], where h[x] = δ[x] + 
+δ[x - x0] and ‘*’ stands for convolution. We propose to recover x0 from the autocorrelation of 
+the captured image z[x]. Specifically, the autocorrelation of z[x] can be expressed as 
+ [ ] [ ]( ) [ ]( ) [ ]( ) [ ] [ ] [ ]0 0R(z x ) R s x * R h x R s x *(2 x x x x x ),δ δ δ= = + − + +                (1) 
+                                                                           Vol. 7, No. 11 | 1 Nov 2016 | BIOMEDICAL OPTICS EXPRESS 4765 
+where ‘R()’ stands for the autocorrelation operation. The term ‘2δ[x] + δ[x - x0] + δ[x + x0]’ 
+in Eq. (1) suggests that if R(s[x]) is narrow enough, then there will be three peaks in the 
+autocorrelation function R(z[x]), one at the center, one at the x0 position, and one at the -x0 
+position. Therefore, in this case, we can recover x0 by identifying the locations of the two 
+first-order peaks of R(z[x]). 
+By definition, the autocorrelation function R(z[x]) can be computed by a convolution 
+operation: R(z[x]) = z[x] * z[-x]. In practice, the Wiener-Khinchin theorem allows us to 
+compute R(z[x]) with two fast Fourier transforms (FFTs): first compute the Fourier power 
+spectrum of the captured image z[x] and then perform an inverse FFT on the power spectrum. 
+Figure 2 summarizes the procedures: we first compute the Fourier power spectrum in Fig. 
+2(a2) and then perform an inverse FFT to get the autocorrelation function R(z[x]) in Fig. 
+2(a3). The distance x0 can be recovered from the distance between the two first-order peaks in 
+Fig. 2(a4). 
+ 
+Fig. 2. The procedures for recovering the translation shift from a single captured image z[x]. 
+(a1) The captured image z[x] from the autofocusing camera. (a2) The Fourier power spectrum 
+of the captured image (we took the log scale to better visualize the fringe pattern). (a3) The 
+autocorrelation function R(z[x]), which can be computed by taking the inverse Fourier 
+transform of (a2). (a4) The line trace of (a3) and the locations of the peaks. (b) The condition 
+for resolving the first-order peaks. 
+Although the procedures in Fig. 2 works well in many cases, we cannot guarantee that it 
+will always recover x0. To gain more intuition into the method, consider two extreme cases 
+for s[x]: 1) s[x] is a constant, and 2) s[x] is an i.i.d. random function. For case 1, the 
+correlation of a constant is still a constant. Therefore, we will get 3 constants overlapped with 
+each other from Eq. (1) and we cannot recover the distance x0. For case 2, the correlation 
+function will be a δ function so that Eq. (1) leads to 3 δ functions. We can, therefore, recover 
+x0 from the locations of the δ functions. In practice, a good model for s[x] is a broadband 
+object o[x] (with narrow correlation function) convolved with the incoherent point spread 
+function (PSF) of the imaging system. Therefore, the power spectrum of s[x] can be 
+approximated by a constant times the magnitude squared of OTF, where ‘OTF’ stands for the 
+optical transfer function (i.e., the Fourier transform of the PSF). Equation (1) then leads to 
+three copies of the correlation function of the PSF in Fig. 2(b). We can then define the 
+following condition for resolving the locations of the first-order peaks: the dip adjacent to the 
+first-order peak is at least 26% lower than the peak value. A similar condition is used in the 
+Rayleigh criterion for defining the resolution of two closely-packed peaks. Under the 
+condition in Fig. 2(b), we can get the following important requirement on x0: 
+ 0 cutoffx · f 1 . 5 6 ,>  (2) 
+where fcutoff stands for the cutoff frequency of the incoherent OTF and is equal to 2NA/λ for 
+an aberration-free system. Equation (2) implies that, if the distance between the two copies is 
+small, then it will be difficult to recover x0. This observation justifies the positional offset of 
+the autofocusing camera in our platform. We set this offset for two purposes: 1) to generate 
+out-of-focus contrast for the captured image, and 2) to satisfy Eq. (2). We also note that the 
+auto-phase correlation index can be used in the acquisition process to select focus candidates 
+[9]. 
+                                                                           Vol. 7, No. 11 | 1 Nov 2016 | BIOMEDICAL OPTICS EXPRESS 4766 
+3. Autofocusing performance and fluorescence WSI 
+In Fig. 2(a4), we need to identify the locations of the two first order peaks to recover x0. A 
+simple solution is to locate the local maximum point, as shown by the black arrow in Fig. 
+3(a1). This solution leads to the step-wise relationship between the recovered x0 and the 
+defocus distance, as shown by the black curve of Fig. 3(a2). This behavior is due to the 
+limited precision of the recovered x0. To achieve sub-pixel precision, we can perform curve 
+fitting to better identify the locations of the first-order peaks. For the red curve in Fig. 3(a1), 
+we used a 5-point smoothing spline fitting to estimate the locations of the first-order peaks. 
+The resulting relationship between x0 and the defocus distance is shown in the red curve of 
+Fig. 3(a2), where we can see a linear relationship between the two. 
+ 
+Fig. 3. The autofocusing performance of our scheme. (a) Achieving a sub-pixel accuracy of the 
+translational shift estimation. (b) The focusing error on 5 samples and 1550 different tiles. (c) 
+Summary of the autofocusing performance. We used a 10-point Brenner gradient method to 
+determine the ground truth position. The average focusing error is ~0.11 DOF, ~3 folds better 
+than the conventional image-contrast-based method. 
+To quantify the performance of the reported scheme, we tested the platform on 5 different 
+tissue sections and 1550 different tiles. The stage is fixed during the autofocusing operation 
+and the camera offset is chosen for achieving a ~80 µm autofocusing range. Figures 3(b) and 
+3(c) summarize the results. In particular, the time to determine the best focus position (from 
+image acquisition to the output of the defocus position) is ~0.037 s, much faster than that of 
+conventional image-contrast-based methods; 45% of the 0.037-s duration is consumed by the 
+two fast Fourier transform (FFT) operations in Fig. 2. Therefore, the speed can be further 
+improved using parallel computing techniques or an FPGA. Figure 3(b) shows the focusing 
+error for the 1550 tissue tiles using a 20X 0.4 NA objective lens, with a depth-of-field (DOF) 
+of ± 3.125 µm. The average focusing error is ~350 nm, which is ~0.11 DOF. In contrast, the 
+average focusing error of the 3-point Brenner gradient method is ~0.34 DOF in a dynamic 
+predictive mode and ~0.2 DOF in a static mode [6]. Our approach is ~3 folds better than that 
+of the dynamic predictive mode and ~2 folds better than that of the static mode. In addition, 
+both stained and transparent samples have similar performance in our scheme. 
+For fluorescence WSI, two strategies can be used for autofocusing. The first one is to 
+acquire a z-stack of fluorescence images and determine the best focus position using the 
+Brenner gradient method. The acquisition of multiple fluorescence images, however, may be 
+extremely time-consuming and introduce photobleaching to the sample. The second strategy 
+is to use the brightfield channel for autofocusing and then acquire the fluorescence image, as 
+suggest by Ref [4]. This strategy, however, may be problematic as many fluorescence 
+samples are transparent under brightfield illumination. It only works for samples with both 
+brightfield and fluorescence staining. To the best of our knowledge, the reported scheme is 
+the first effective approach for both brightfield and fluorescence WSI. It uses the unwanted 
+                                                                           Vol. 7, No. 11 | 1 Nov 2016 | BIOMEDICAL OPTICS EXPRESS 4767 
+brightfield channel for autofocusing, and thus, no fluorescence photon is lost in the 
+acquisition process. It can handle transparent samples by introducing an offset to the 
+autofocusing camera. Figure 4 shows the whole slide fluorescence images captured by using 
+the reported platform. 
+ 
+Fig. 4. The fluorescence images of a breast cancer (top) and an unstained mouse kidney section 
+(bottom). The full images can be found from http://gigapan.com/profiles/SmartImagingLab. 
+4. Summary 
+We have reported a novel autofocusing scheme for brightfield and fluorescence whole slide 
+imaging. In our approach, we place a two-pinhole-modulated camera at the epi-illumination 
+arm. The captured image contains two copies of the sample separated by a certain distance. 
+By identifying this distance, we can recover the defocus distance of the sample over a long z-
+range and without z-scanning. We have also discussed conditions for recovering the distance 
+between the two copies. In particular, we introduce a positional offset to the autofocusing 
+camera to satisfy the autofocusing condition in Eq. (2) and to generate out-of-focus image 
+contrast. 
+There are several important advantages to the suggested scheme: 1) it only needs one 
+image for autofocusing, and thus, it shortens the time for producing a focus map in WSI 
+platforms. More importantly, the single-frame nature of the reported scheme allows 
+autofocusing even when the stage is in continuous motion (with pulsed illumination). The use 
+of single image for autofocusing is a clear advantage over the dual-camera technique reported 
+in Ref [3], where rapid z-scanning is needed for each tile. The speed for autofocusing speed is 
+0.037 s per tile, which is, to the best of our knowledge, a record-high speed. 2) The 
+autofocusing performance is ~3 folds better than that of image-contrast-based methods. 3) 
+The autofocusing range is at least 80 µm in the reported prototype platform and it is ~8 folds 
+better than that of conventional approaches. 4) The reported scheme is able to handle 
+transparent or unstained samples, which is a clear advantage over other existing methods. 5) 
+Our approach requires only a cost-effective microscope add-on kit as shown in Fig. 1(b2). 
+The dissemination of the proposed scheme for WSI brightfield and fluorescence imaging 
+under a limited budget will enable new types of experimental designs in biological and 
+clinical labs, e.g., digital pathology, cytology analysis, genetic studies on multicellular 
+organisms, drug profiling, DNA sequencing, and more. 
+One future direction is to investigate the optimal mask placed at the Fourier plane. The 
+two-pinhole mask may not be optimal for recovering the defocus distance. Effort along this 
+direction is on-going. Another direction is to implement pulsed illumination, which allows 
+autofocusing while the stage is in continuous motion. Performing accurate autofocusing at 
+high speed is the Achilles’ heel of WSI. The reported scheme may provide a transformative 
+solution for brightfield/ fluorescence WSI, in particular, for handling transparent and low-
+contrast samples. 
+Acknowledgment 
+This work was supported by NSF DBI 1555986. L. Bian acknowledges the support of the 
+National Natural Science Foundation of China under grant 61327902. Z. Zhang 
+acknowledges the support of the China Scholarship Council. 
+                                                                           Vol. 7, No. 11 | 1 Nov 2016 | BIOMEDICAL OPTICS EXPRESS 4768 
+
+
+
