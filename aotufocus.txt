@@ -1,0 +1,1309 @@
+
+一、 测距法
+传统对焦技术使用比较广泛的就是测距法，其基本原理就是通过红外、激光以及超声波等设备测量目标物体与透镜之间的距离，即物距，再根据高斯成像公式 计算对应的像距，最后调整物距，以此来进行系统的自动对焦。如下公式为理想的光学成像系统模型。设透镜的焦距为f，孔径为D。目标物体要通过透镜能够清晰成像，必须要满足高斯成像公式，表示为：
+
+
+其中， U表示物距，V表示像距。根据高斯成像公式可以知道，当物距U和透镜焦距f的值确定时，目标物体会呈现清晰的成像画面。
+
+由于对焦过程需要摄像头主动发射信号，再接收目标物体反射回来的信号，所以该方式存在一个缺点，假如这个信号被目标物体吸收或者散射，那么接收端收到的信号比较微弱甚至接收不到信号，这样就无法准确得到物距，将导致对焦失败。同时，该方法所需要的辅助信号发送接收装置会使整个成像系统的硬件体积增加，能耗变高，且系统复杂度高，易受外界环境干扰。
+
+二、 焦点检测法
+焦点检测法主要分两大类：对比度检测法和相位差检测法。
+
+1. 对比度检测法
+
+对比度是指一幅图像各像素点灰度值从 0 到 255 之间差异的大小。对焦成功的图像的对比度最大，图像中物体边缘轮廓越清晰，色彩越生动明艳。
+
+
+基于该原理，在距离焦平面相等的两个位置，分别放置一个传感器，该传感器可以收集图像的对比度信息。然后控制电机移动焦平面，C1和C2得到图像的对比度变化曲线。两条曲线相交的位置，即为正焦位置。
+
+
+图1 对比度检测法
+对比度检测法主要基于感光器件及图像处理器，不需要的一个单独的对焦辅助装置，且精度也比测距法来的更高。但因为需要多次采集对比度信息，并多次计算，所以对焦速度较慢。另外，还需要目标物体具备足够的对比度，对于那些纯色或者反差不明显的情况，该方法存在失败的可能。
+
+2. 相位检测法
+
+相位检测法是目前单反相机普遍使用的方法，主要依赖检测相位差的自动对焦传感器。如下图，光线被2个或多个带有多个微小透镜的小型图像传感器接收。事实上，现代相位检测设备上的传感器数量远不止两个,而且这些传感器彼此非常靠近。
+
+当光线到达这两个传感器时，如果物体处于对焦状态,则来自镜头最两侧的光线会聚在每个传感器的中心 。两个传感器上都会有相同的图像,表明该物体确实处于合焦状态。
+
+
+图2 相位检测法
+上图的1至4 表示镜头聚焦的情况，黄色为图像传感器，可以看到随着图像传感器和镜头的位置发生相对运动，两两个传感器的曲线之间产生相位差。有一点需要注意，在实际的系统中，最终移动的是镜头而不是传感器。对焦系统通过检测信号波峰的位置，就可以知道偏移的方向，计算出相位差，得出目标的距离， 控制镜头往前或者往后移动， 自动完成对焦。 该方法对焦速度快，只需要计算一次就能完成对焦。
+
+近几年,该方法也在手机相机上流行起来,但是由于手机相机模组高度集成,不适合增加单独的对焦传感器,于是人们便直接在手机相机的感光元件上预留出成对的遮蔽像素点来进行相位检测。
+
+与对比度检测法相比较， 相位差检测法[12]对焦过程一步到位，不需要镜头反复运动，但是由于需要 CCD 感光元件上预留的遮蔽像素点来进行相位检测，故而对环境光线要求比较高，较暗的环境下，其对焦效果不理想。
+
+3. 混合对焦模式
+
+经过对焦点检测法两大类方法的分析， 我们发现两者优势劣势都较为明显， 现在人们通常是将两者相结合，称之为混合对焦模式，充分发挥两者的优势， 无论对焦精度，还是对焦速度，都得到明显改善，广泛应用于单反相机和手机相机领域。
+
+三、数字图像对焦法
+基于数字图像的对焦技术，主要可以分为两大类：离焦深度法 DFD（Depth From Defocus） 和对焦深度法 DFF（Depth From Focus）。
+
+1. 离焦深度法 DFD
+
+离焦深度法DFD是一种通过建立数学模型的方法来实现对焦的方法，其基本思路是通过大量采集离焦的图像，分析图像参数，离焦程度和清晰度的对应关系，从而建立对焦系统的数学模型。利用模型中对应的模糊图像推导出与焦平面的偏移量，然后驱动位移平台移动到焦平面，完成整个对焦过程。这种方法对建立的数学模型精度要求很高，通常只需要采集2到3幅图像即可完成对焦的过程,使得对焦的时间大大缩短。由于这种方法的关键在于对焦前系统已经获取待对焦物体的大量图像信息，一旦待测环境改变，需要重新拟合离焦程度和清晰度的对应关系曲线，对图像信息处理器的性能依赖程度高。
+
+2. 对焦深度法 DFE
+
+该方法是一种搜寻正焦平面的方法， 首先通过相机采集一系列图像，然后对获取到的图像，使用图像清晰度算法分析处理后，根据得到的评价值的大小，控制驱动装置带动位移平台，移动到图像清晰度评价曲线的极值点位置，理论上就可以获得最清晰图像，完成整个对焦过程。 该方法的对焦速度比离焦深度法慢，但对焦精度比它高。
+
+这两种方式理解起来有点困难，简单来说就是离焦深度方法是从离焦图像中获得模糊程度和深度信息。对焦深度法首先需要一系列模糊程度不同的图像，计算这一系列图像的清晰度评价值，再根据这些评价值，确定合焦位置。这两种方法都涉及到清晰度评价的问题，所以如何得到清晰度评价的拟合函数，就考研各大厂家的功底了。接下来简要罗列一下常用的几种清晰度评价函数作为参考。具体内容请大家自行查阅相关文献。
+
+基于空域的评价函数
+
+Brenner 函数
+梯度平方（EOG） 函数
+灰度差分绝对值之和（SMD） 函数
+Variance 函数
+二级梯度平方（Tenengrad） 函数
+Laplace 函数
+基于频域的对焦评价函数
+
+傅利叶变换
+离散余弦变换（DCT）
+基于灰度熵的对焦评价函数
+改进后的灰度熵（improved-hist） 函数
+基于空域的评价函数计算量较小、效率高，缺点是单调性差、 正焦平面附近灵敏度低。 基于频域的对焦评价函数能真实反应图像的清晰度， 但是傅里叶变换使得计算量大。 基于灰度熵的对焦评价函数实现简单， 但是对焦精度低、 抗干扰能力差。 以上三大类常用的对焦评价函数各有优缺点，需要根据实际场景进行选择和优化。
+
+
+红外测距仪的分类有激光红外，红外和超声波三种，红外测距仪和超声波测距仪由于测量距离有限，测量精度很低目前基本已经被淘汰了。
+
+超声波测距的原理是利用超声波在空气中的传播速度为已知，测量声波在发射后遇到障碍物反射回来的时间，根据发射和接收的时间差计算出发射点到障碍物的实际距离。超声波测距仪由超声波发生电路、超声波接收放大电路、计数和显示电路组成。
+
+　　1、精度上，超声波测距仪的测量精度是厘米级的
+
+　　2、测量范围上，超声波测距仪的测量范围通常在80米以内，而手持式激光测距仪的测量范围最高可到200米
+
+　　3、超声波测距仪容易报错，由于超声波测距仪是声波发射，具有声波的扇形发射特性，所以当声波经过之处障碍物较多时，反射回来的声波较多，干扰较多，易报错
+
+　　4、超声波测距仪的价格从几十元到几百元
+
+
+
+先大胆猜测一下，题主所说的红外测距应该是sharp的红外测距传感器。以及淘宝上由几块钱到几百块不等的超声波传感器。
+
+
+
+
+下面开始讲讲这两种传感器各自的情况吧。
+
+上面红外传感器为sharp制作，是传感器行业比较牛B的公司，质量比较可靠一致性好，超声波传感器一般为国内公司自主设计，产品质量参差不齐，这也是为什么价格也差距甚大。
+
+红外传感器是什么原理呢？看下图，
+
+工作原理：
+
+Sharp的红外传感器都是基于一个原理，三角测量原理。红外发射器按照一定的角度发射红外光束，当遇到物体以后，光束 会反射回来，如图1所示。反射回来的红外光线被CCD检测器检测到以后，会获得一个偏移值L，利用三角关系，在知道了发射角度a，偏移距L，中心矩X，以 及滤镜的焦距f以后，传感器到物体的距离D就可以通过几何关系计算出来了。
+
+
+
+
+
+可以看到，当D的距离足够近的时候，L值会相当大，超过CCD的探测范围，这时，虽然物体很近，但是传感器反而看不到 了。当物体距离D很大时，L值就会很小。这时CCD检测器能否分辨得出这个很小的L值成为关键，也就是说CCD的分辨率决定能不能获得足够精确的L值。要 检测越是远的物体，CCD的分辨率要求就越高。
+
+
+由红外传感器工作原理可以得出一个缺点：检测的最小距离太大。
+
+其实不光有最小限制，还具有非线性：
+
+
+
+
+再来说说超声波传感器。
+
+超生波传感器检测距离原理是发出超声波再检测到发出的超声波，同时根据声速计算出物体的距离。
+
+根据其原理可以知道其缺点有下2个：声音的速度受温度和风向的干扰，有可能被吸音面给吸收。
+
+其优势按照现在某宝上销售的也可以看见：可以选择的输出方式多变，几乎什么协议都有，串口，I2C，PWM，软件设定阈值什么的。测量距离普遍比红外的远，最近测量距离较小。
+
+
+
+工业检测，图像算法，《深度学习技术图像处理入门》
+红外测距速度快，但是太阳光一来你就测不准了，我们曾经做过一个避障小车，室内效果很好，拿到室外直接就不跑了，反而是有障碍物的时候才跑。
+
+原理居然是这样！因为红外测距的原理是，一个红外LED发光，然后另外一个红外接收管测红外光的强度！太阳光一来光线强度直接就最大了，然后有障碍物之后光强才会变低。在室内光线强度和距离成正比，在室外有点成反比，所以程序就跑不对了。
+
+另外红外还有一个缺点，就是不同的面返回的光线强度不一样，黑色返回的数据要比白色底许多，所以光线强度和距离不一定完全成正比，材料一换，对应的关系也就换了。
+
+
+
+超声波测距也有许多缺点。
+
+最大的一个缺点就是慢，如果你要测3米的距离，先不考虑声波能不能传回来，首先3*2/340就超过10ms了，距离再远一点就没法测了，声音传不回来。
+
+其次还有一个缺点就是必须是平面，请自行脑补45度面接收到声音之后打到一边的场景。
+
+最后再来一个缺点，不能同时检测，因为声音是可以互相干扰的，只能轮询，一个接一个去检测。
+ 
+[70] P. Memmolo, C. Distante, M. Paturzo, A. Finizio, P. Ferraro, B. Javidi, Opt. Lett. 2011, 36, 
+1945-1947. 
+[71] P. Ferraro, G. Coppola, S. De Nicola, A. Finizio, G. Pierattini, Opt. Lett. 2003, 28, 1257-1259. 
+[72] Y. Zhang, H. Wang, Y. Wu, M. Tamamitsu, A. Ozcan, Opt. Lett. 2017, 42, 3824-3827. 
+[73] M. Lyu, C. Yuan, D. Li, G. Situ, Appl. Opt. 2017, 56, F152-F157. 
+[74] W. Li, N. C. Loomis, Q. Hu, C. S. Davis, JOSA A 2007, 24, 3054-3062. 
+[75] F. Dubois, C. Schockaert, N. Callens, C. Yourassowsky, Opt. Express 2006, 14, 5895-5908. 
+[76] A. Thelen, J. Bongartz, D. Giel, S. Frey, P. Hering, JOSA A 2005, 22, 1176-1180. 
+[77] P. Memmolo, M. Paturzo, B. Javidi, P. A. Netti, P. Ferraro, Opt. Lett. 2014, 39, 4719-4722. 
+[78] Z. Ren, N. Chen, E. Y. Lam, Opt. Lett. 2017, 42, 1720-1723. 
+[79] K. Bahrami, A. C. Kot, IEEE Signal Process. Lett. 2014, 21, 751-755. 
+[80] L. Li, W. Xia, W. Lin, Y. Fang, S. Wang, IEEE Trans. Multimed. 2016, 19, 1030-1040. 
+[81] Y. Liu, K. Gu, G. Zhai, X. Liu, D. Zhao, W. Gao, J. Vis. Commun. Image Represent. 2017, 
+46, 70-80. 
+[82] A. Liu, W. Lin, M. Narwaria, IEEE Trans. Image Process. 2011, 21, 1500-1512. 
+[83] J. Guan, W. Zhang, J. Gu, H. Ren, J. Vis. Commun. Image Represent. 2015, 29, 1-7. 
+[84] G. Gvozden, S. Grgic, M. Grgic, J. Vis. Commun. Image Represent. 2018, 50, 145-158. 
+[85] R. Hassen, Z. Wang, M. M. Salama, IEEE Trans. Image Process. 2013, 22, 2798-2810. 
+[86] A. Leclaire, L. Moisan, Journal of Mathematical Imaging and Vision 2015, 52, 145-172. 
+[87] N. D. Narvekar, L. J. Karam, IEEE Trans. Image Process. 2011, 20, 2678-2683. 
+[88] A. Jiménez, G. Bueno, G. Cristóbal, O. Déniz, D. Toomey, C. Conway, Optics, Photonics 
+and Digital Technologies for Imaging Applications IV, SPIE, 2016, 98960S 
+[89] M. S. Hosseini, J. A. Brawley-Hayes, Y. Zhang, L. Chan, K. N. Plataniotis, S. Damaskinos, 
+IEEE Trans. Med. Imaging 2019, 39, 62-74. 
+[90] L. Kang, P. Ye, Y. Li, D. Doermann, Proceedings of the IEEE conference on computer vision 
+and pattern recognition, IEEE, 2014, 1733-1740 
+[91] S. Yu, S. Wu, L. Wang, F. Jiang, Y. Xie, L. Li, PLoS One 2017, 12. 
+[92] C. Senaras, M. K. K. Niazi, G. Lozanski, M. N. Gurcan, PLoS One 2018, 13. 
+[93] G. Campanella, A. R. Rajanna, L. Corsale, P. J. Schüffler, Y. Yagi, T. J. Fuchs, Comput. Med. 
+Imaging Graph. 2018, 65, 142-151. 
+[94] S. J. Yang, M. Berndl, D. M. Ando, M. Barch, A. Narayanaswamy, E. Christiansen, S. Hoyer, 
+C. Roat, J. Hung, C. T. Rueden, BMC Bioinformatics 2018, 19, 77. 
+[95] Y. Liron, Y. Paran, N. Zatorsky, B. Geiger, Z. Kam, J. Microsc. 2006, 221, 145-151. 
+[96] G. Reinheimer, US 3,721,827, 1973. 
+[97] M. Sato, J. Matsuno, US 5,530,237, 1996. 
+[98] Y. Yonezawa, US 5,483,079, 1996. 
+[99] K. Ito, T. Musha, K. Kato, US 4,422,168, 1983. 
+[100] H. Noda, S. Dosaka, H. Kurosawa, US 5,317,142, 1994. 
+[101] P. Kramer, G. Bouwhuis, P. E. Day, US 3,876,841, 1975. 
+[102] C. H. Velzel, P. F. Greve, US 4,074,314, 1978. 
+This article is protected by copyright. All rights reserved.
+ 
+hunting or errors in the focus drift correction system. Plastic tissue culture dishes are also not 
+recommended, as the boundary surface may not be detectable due to insufficient offset111. 
+3.3. Low-coherence interferometry with oblique illumination  
+The idea of using optical coherence tomography (OCT) for autofocusing was proposed in a patent 
+by Wei and Hellmuth in 1996112. The general concept is to locate the sample position using the 
+axial depth reflectivity profile called A-scan, which contains scattering information of sample 
+structures along the axial direction. In the original patent, an on-axis configuration is used to 
+perform autofocusing of an ophthalmologic surgical microscope. However, it is not suitable for 
+high-resolution imaging of tissue slides covered by glass. The main difficulty is the overlap 
+between the large signal reflected by glass surfaces and the weak signal reflected from the sample. 
+Locating the sample position with submicron accuracy is challenging given the large signals 
+reflected from the glass surfaces.  
+ 
+Figure 5. Low-coherence interferometry for reflective real-time autofocusing. A superluminescent diode is used as a 
+low-coherence light source. The light illuminates the sample from a tilted incident angle. As such, most reflected light 
+from the glass surface will not be coupled back to the interferometry system. The axial depth reflectivity profile (i.e., 
+A-scan) is measured using a spectrometer. The recovered sample position is used to move the z stage or the objective 
+lens. Adapted from Ref. 113.  
+ 
+ This article is protected by copyright. All rights reserved.
+Autofocusing technologies for whole slide imaging and automated microscopy 
+Zichao Bian1,3, Chengfei Guo1,3, Shaowei Jiang,1,*, Jiakai Zhu1, Ruihai Wang1, Pengming Song2, 
+Zibang Zhang1, Kazunori Hoshino1, and Guoan Zheng1,* 
+1University of Connecticut, Department of Biomedical Engineering, Storrs, CT, 06269, USA 
+2University of Connecticut, Department of Electrical and Computer Engineering, Storrs, CT, 
+06269, USA 
+3These authors contributed equally to this work 
+*E-mail: shaowei.jiang@uconn.edu (S. J.) or guoan.zheng@uconn.edu (G. Z.)  
+Abstract: Whole slide imaging (WSI) has moved digital pathology closer to diagnostic practice 
+in recent years. Due to the inherent tissue topography variability, accurate autofocusing remains a 
+critical challenge for WSI and automated microscopy systems. The traditional focus map 
+surveying method is limited in its ability to acquire a high degree of focus points while still 
+maintaining high throughput. Real-time approaches decouple image acquisition from focusing, 
+thus allowing for rapid scanning while maintaining continuous accurate focus. This work reviews 
+the traditional focus map approach and discusses the choice of focus measure for focal plane 
+determination. It also discusses various real-time autofocusing approaches including reflective-
+based triangulation, confocal pinhole detection, low-coherence interferometry, tilted sensor 
+approach, independent dual sensor scanning, beam splitter array, phase detection, dual-LED 
+illumination, and deep-learning approaches. The technical concepts, merits, and limitations of 
+these methods are explained and compared to those of a traditional WSI system. This review may 
+provide new insights for the development of high-throughput automated microscopy imaging 
+systems that can be made broadly available and utilizable without loss of capacity.   
+ 
+Keywords: whole slide imaging, digital pathology, focus quality, focus map, deep learning. 
+ 
+ 
+ 
+ 
+ 
+ This article is protected by copyright. All rights reserved.
+This article has been accepted for publication and undergone full peer review but has 
+not been through the copyediting, typesetting, pagination and proofreading process 
+which may lead to differences between this version and the Version of Record. Please 
+cite this article as doi: 10.1002/jbio.202000227
+ 
+[103] R. Jorgens, B. Faltermeier, US 4,958,920, 1990. 
+[104] O. Mueller, US 4,025,785, 1977. 
+[105] Q. Li, L. Bai, S. Xue, L. Chen, Opt. Eng. 2002, 41, 1289-1294. 
+[106] C.-S. Liu, S.-H. Jiang, Meas. Sci. Technol. 2013, 24, 105101. 
+[107] C.-S. Liu, Y.-C. Lin, P.-H. Hu, Microsyst. Technol. 2013, 19, 1717-1724. 
+[108] C.-S. Liu, S.-H. Jiang, Appl. Phys B 2014, 117, 1161-1171. 
+[109] C.-S. Liu, Z.-Y. Wang, Y.-C. Chang, Appl. Phys B 2015, 121, 69-80. 
+[110] C.-S. Liu, S.-H. Jiang, Opt. Lasers Eng. 2015, 66, 294-300. 
+[111] J. S. Silfies, E. G. Lieser, S. A. Schwartz, M. W. Davidson, Nikon Perfect Focus System 
+(PFS), https://www.microscopyu.com/applications/live-cell-imaging/nikon-perfect-focus-system. 
+[112] J. Wei, T. Hellmuth, US 5,493,109, 1996. 
+[113] A. Cable, J. Wollenzin, R. Johnstone, K. Gossage, J. S. Brooker, J. Mills, J. Jiang, D. 
+Hillmann, US 9,869,852, 2018. 
+[114] R. R. McKay, V. A. Baxi, M. C. Montalto, J. Pathol. Inform. 2011, 2. 
+[115] T. Virág, A. László, B. Molnár, A. Tagscherer, V. S. Varga, US 7,663,078, 2010. 
+[116] P. Prabhat, S. Ram, E. S. Ward, R. J. Ober, IEEE Transactions on Nanobioscience 2004, 3, 
+237-242. 
+[117] S. Abrahamsson, J. Chen, B. Hajj, S. Stallinga, A. Y. Katsov, J. Wisniewski, G. Mizuguchi, 
+P. Soule, F. Mueller, C. D. Darzacq, Nat. Methods. 2013, 10, 60-63. 
+[118] A. Descloux, K. Grußmayer, E. Bostan, T. Lukes, A. Bouwens, A. Sharipov, S. 
+Geissbuehler, A.-L. Mahul-Mellier, H. Lashuel, M. Leutenegger, Nat. Photon. 2018, 12, 165-172. 
+[119] S. Xiao, H. Gritton, H.-a. Tseng, D. Zemel, X. Han, J. Mertz, bioRxiv 2020. 
+[120] R.-T. Dong, U. Rashid, J. Zeineh, US 2005/0089208A1, 2005. 
+[121] B. Hulsken, S. Stallinga, US 10,353,190, 2019. 
+[122] B. Hulsken, US 10,091,445, 2018. 
+[123] B. Hulsken, US 9,578,227, 2017. 
+[124] B. Hulsken, US 9,910,258, 2018. 
+[125] B. Hulsken, S. Stallinga, US 10,365,468, 2019. 
+[126] J. P. Vink, B. Hulsken, M. Wolters, M. B. Van Leeuwen, S. H. Shand, US 10,623,627, 2020. 
+[127] Y. Zou, G. J. Crandall, A. Olson, US 9,841,590, 2017. 
+[128] A. Olson, K. Saligrama, Y. Zou, P. Najmabadi, US 10,459,193, 2020. 
+[129] J. H. Price, US 5,932,872, 1999. 
+[130] A. Kinba, M. Hamada, H. Ueda, K. Sugitani, H. Ootsuka, US 5,597,999, 1997. 
+[131] K. Guo, J. Liao, Z. Bian, X. Heng, G. Zheng, Biomed. Opt. Express 2015, 6, 3210-3216. 
+[132] J. Liao, L. Bian, Z. Bian, Z. Zhang, C. Patel, K. Hoshino, Y. C. Eldar, G. Zheng, Biomed. 
+Opt. Express 2016, 7, 4763-4768. 
+[133] L. Silvestri, M. C. Muellenbroich, I. Costantini, A. P. Di Giovanna, L. Sacconi, F. S. Pavone, 
+bioRxiv 2017, 170555. 
+[134] J. Liao, Z. Wang, Z. Zhang, Z. Bian, K. Guo, A. Nambiar, Y. Jiang, S. Jiang, J. Zhong, M. 
+Choma, G. Zheng, J. Biophotonics 2018, 11, e201700075. 
+This article is protected by copyright. All rights reserved.
+ 
+One solution to this problem is to substantially reduce the light reflected from glass surfaces 
+while keeping the sample scattering light relatively unchanged. Figure 5 demonstrates such a 
+solution by using an off-axis configuration, where the light illuminates the sample at a tilted 
+incident angle113. As such, the light directly reflected from the glass surface will not be coupled 
+back to the interferometry system. In Figure 5, a broadband superluminescent diode is used as the 
+low-coherence light source. The axial depth reflectivity profile (i.e., A-scan) is measured using a 
+spectrometer in a Fourier-domain OCT setup. The sample position can be calculated by performing 
+a Fourier transform of the captured spectrum and used to move the objective lens to the in-focus 
+position.   
+Since OCT is sensitive to refraction index variations within the sample, this approach can 
+handle transparent samples that may be challenging for the traditional focus map approach. The 
+disadvantages, perhaps, are the complicated Fourier-domain OCT setup, the precise optical 
+alignment, and the high maintenance of the system.  
+4. Real-time image-based autofocusing  
+The pre-scan focus map approach requires the acquisition of a z-stack for each focus point. The 
+sample needs to be scanned to different x-y positions for acquiring multiple z-stacks to generate 
+the focus map. In many WSI systems, the overhead time for generating the focus map is a 
+substantial portion of the total scanning time. In this section, we will discuss several real-time 
+image-based autofocusing approaches without the need for generating the focus map.   
+4.1. Independent dual sensor scanning  
+The traditional focus map approach uses the same image sensor to both survey the focus and 
+acquire the image. In between two image acquisitions, there is a certain amount of ‘dead time’ to 
+read out the data to the memory. As a result, the main camera cannot be used to survey the focus 
+during this ‘dead time’. An independent secondary image sensor has been proposed to survey the 
+focus in parallel6, 114.  
+ This article is protected by copyright. All rights reserved.
+ 
+Short descriptive and popular text: A fundamental challenge with automated microscopy and 
+high-throughput imaging has been the ability to acquire high-quality, in-focus images at high 
+speed. This review article discusses different autofocusing approaches for automated microscopy 
+and whole slide imaging (WSI). The technical concepts, merits, and limitations of these methods 
+are explained and compared to those of a traditional WSI system. 
+1. Introduction 
+The process of analyzing pathology slides using an optical microscope has remained relatively 
+unchanged until recently. In a regular process, pathologists move the microscope stage to different 
+positions to identify areas of interest, which can be further analyzed by switching to a higher 
+magnification objective lens. The focusing of the slide is manually performed using the focus knob 
+of the microscope platform. Although this traditional slide reviewing process remains the gold 
+standard in diagnosing a large number of diseases including almost all types of cancers, it is highly 
+subjective on the other hand: different pathologists may arrive at different conclusions and the 
+same person may also give different conclusions at different time points. In terms of workflow 
+efficiency, this process is labor-intensive and can be easily disrupted when a pathologist bumps a 
+slide to a high magnification objective lens1. Similarly, it can be disrupted when the pathologist 
+switches to a different objective lens and performs manual focusing of the slide. After the 
+reviewing process, the slides must be kept accessible, clean and protected, creating additional 
+storage and labor demands1, 2. 
+Since the current slide reviewing process is based on subjective opinions of pathologists, there 
+is a need for quantitative and streamlined assessment of histology slides. Quantitative 
+characterization of pathology imagery is not only important for reducing inter- and intra-observer 
+variations in diagnosis but also to better understand the biological mechanisms of the disease 
+process3. Recent clinical guidelines have begun to require quantitative evaluations as part of the 
+effort towards better patient risk stratification4. For example, breast cancer staging requires the 
+counting of mitotic cells.  
+ This article is protected by copyright. All rights reserved.
+ 
+[135] J. Liao, S. Jiang, Z. Zhang, K. Guo, Z. Bian, Y. Jiang, J. Zhong, G. Zheng, J. Biomed. Opt. 
+2018, 23, 066503. 
+[136] J. Liao, Y. Jiang, Z. Bian, B. Mahrou, A. Nambiar, A. W. Magsam, K. Guo, S. Wang, Y. ku 
+Cho, G. Zheng, Opt. Lett. 2017, 42, 3379-3382. 
+[137] S. Jiang, Z. Bian, X. Huang, P. Song, H. Zhang, Y. Zhang, G. Zheng, Quant Imaging Med 
+Surg 2019, 9, 823-831. 
+[138] C. Guo, Z. Bian, S. Jiang, M. Murphy, J. Zhu, R. Wang, P. Song, X. Shao, Y. Zhang, G. 
+Zheng, Opt. Lett. 2020, 45, 260-263. 
+[139] C. Belthangady, L. A. Royer, Nat. Methods. 2019, 1-11. 
+[140] T. R. Dastidar, R. Ethirajan, Biomed. Opt. Express 2020, 11, 480-491. 
+[141] S. Jiang, J. Liao, Z. Bian, K. Guo, Y. Zhang, G. Zheng, Biomed. Opt. Express 2018, 9, 1601-
+1612. 
+[142] Q. Li, X. Liu, K. Han, C. Guo, X. Ji, X. Wu, arXiv preprint arXiv:2003.06630 2020. 
+[143] Y. Luo, L. Huang, Y. Rivenson, A. Ozcan, arXiv preprint arXiv:2003.09585 2020. 
+[144] H. Pinkard, Z. Phillips, A. Babakhani, D. A. Fletcher, L. Waller, Optica 2019, 6, 794-797. 
+[145] Y. Rivenson, Z. Göröcs, H. Günaydin, Y. Zhang, H. Wang, A. Ozcan, Optica 2017, 4, 1437-
+1443. 
+[146] A. Shajkofci, M. Liebling, 2018 25th IEEE International Conference on Image Processing 
+(ICIP), IEEE, 2018, 3818-3822 
+[147] A. Shajkofci, M. Liebling, arXiv preprint arXiv:2001.00667 2020. 
+[148] Y. Wu, Y. Rivenson, H. Wang, Y. Luo, E. Ben-David, L. A. Bentolila, C. Pritz, A. Ozcan, 
+Nat. Methods. 2019, 16, 1323-1331. 
+[149] Z. Ren, Z. Xu, E. Y. Lam, Optica 2018, 5, 337-344. 
+[150] L. Wei, E. Roberts, Sci. Rep. 2018, 8, 1-10. 
+[151] O. Ronneberger, P. Fischer, T. Brox, International Conference on Medical image computing 
+and computer-assisted intervention, Springer, 2015, 234-241 
+[152] P. Isola, J.-Y. Zhu, T. Zhou, A. A. Efros, Proceedings of the IEEE conference on computer 
+vision and pattern recognition, 2017, 1125-1134 
+ 
+ This article is protected by copyright. All rights reserved.
+ 
+ 
+Figure 6. Independent dual sensor scanning for real-time image-based autofocusing. (a) The optical scheme, where a 
+high-speed focusing camera is used to survey the focus in parallel with the main camera. (b) The focusing sensor 
+acquires three autofocus images, each at a slightly different focal plane. The system calculates the optimal focus 
+position and moves the sample to that focal plane, where the main camera takes a high-resolution image. (c) The stage 
+is in continuous motion during this process and the captured three images only share a small region of overlap. 
+Modified from Ref. 6. 
+ 
+ Figure 6 shows the principle and operation of this concept. In Figure 6(a), an independent 
+camera, termed focusing sensor, is used to survey the focus while the main camera captures the 
+high-resolution sample images. During the scanning process, the stage is in continuous motion and 
+the motion blur is eliminated by using short pulses of light during imaging. As shown in Figure 
+6(b), the focusing sensor acquires three autofocus images, each at a slightly different focal plane. 
+Based on these three images, the system calculates the optimal focus position and moves the 
+sample to that focal plane25, where the main camera takes a high-resolution image. When the main 
+camera is reading out image data, the autofocusing is repeated for the next tile position to predict 
+its optimal focal plane ahead. Since the stage is in continuous motion during this process, the 
+captured three focus images only share a small region of overlap (Figure 6(c)). Only the 
+overlapping region is used to calculate the correct focal position. The autofocusing performance 
+This article is protected by copyright. All rights reserved.
+ 
+A whole slide imaging (WSI) system is designed to replace the traditional microscope for 
+quantitative and streamlined slide reviewing. It was first developed based on a robotic microscope 
+platform in 1990s5. The essential components of a WSI system include the following: 1) a 
+microscope with objective lenses, 2) robotics to move slides, 3) one or more image sensors for 
+image acquisition and autofocusing, and 4) software for management. In the acquisition process, 
+a typical WSI system captures hundreds of high-resolution images that are subsequently aligned 
+and stitched together to create a complete and seamless representation of the original whole tissue 
+section6. The stitched whole slide image can provide a digital equivalent of the original glass slide 
+on the microscope. The pathologists can then view, navigate, change magnification, and annotate 
+the virtual slide with speed and ease. Digital pathology using WSI is now advancing into clinical 
+workflow for better and faster predication, diagnosis, and prognosis of cancers and other diseases1. 
+A major milestone was accomplished in 2017 when the U.S. Food and Drug Administration 
+approved the first WSI scanner for primary diagnostic use in the U.S.7, 8. The new generation of 
+pathologists trained on digital pathology promises further growth of the field in the coming 
+decades. 
+Another driving force for the development of digital pathology is the recent advancement of 
+artificial intelligence (AI) in medical diagnosis9-13. In particular, deep-learning approaches have 
+been demonstrated for automated analysis of microscopic pathology images with performance 
+comparable to that by human experts14-18. An augmented reality microscope has also recently been 
+developed to provide real-time integration of AI in the slide inspection process15. In this augmented 
+reality microscope platform, two modules are attached to a regular upright microscope. The first 
+module is a digital camera that captures high-resolution images of the same field of view as one 
+observes through the eyepiece ports. The second module is a microdisplay that projects digital 
+information into the eyepiece ports. In a typical implementation, the captured image from the 
+camera will be processed by a deep learning algorithm to produce a heatmap that predicts tumor 
+probability. The outline of the predicted tumor regions will then be projected to the eyepiece ports 
+This article is protected by copyright. All rights reserved.
+ 
+of this system has been validated with various tissue sections114. The average focusing error is 
+~0.30 µm for the continuous motion scheme. Around 95% of tiles fall within the system’s depth 
+of field. 
+4.2. Beam splitter array    
+In the independent dual sensor scanning scheme discussed above, multiple images are acquired to 
+calculate the focus position when the sample is moved to different focal planes. In a patent 
+published in 2010, Virag et al. proposed to use a beam splitter array to allow capturing images at 
+different focal planes on the same image sensor115. Figure 7 shows the imaging setup, where the 
+focusing optics comprises a main imaging camera and a secondary focusing camera. A beam 
+splitter array is used to split and direct the light beam to different regions of the focusing sensor. 
+As such, the system can capture images at multiple focal planes at the same time. The 45-degree 
+semi-reflective surfaces in the beam splitter array are chosen to assure that all beams reflected by 
+the surfaces have roughly the same intensities. With the image captured by the focusing sensor, a 
+certain focus measure and fitting model can be used to infer the optimal focus position. In 
+additional to autofocusing, this scheme can also be modified for real-time multiplane 
+microscopy116-119, which finds important applications in volumetric imaging of biological samples.   
+ 
+This article is protected by copyright. All rights reserved.
+ 
+via the microdisplay. As such, the pathologists can observe the original specimen overlaid with 
+the AI-assisted information through the eyepiece ports.     
+A fundamental challenge with WSI, automated microscopy, and augmented reality microscopy 
+has been the ability to acquire high-quality, in-focus images at high speed. For a high numerical 
+aperture (NA) objective lens, the depth of field is on the orders of 1 µm. The small depth of field 
+poses a difficulty to track the axial topography variations that inherently exist in solid tissue 
+samples6. If the specimen is not placed within the depth of field of the objective lens, the image 
+quality of the acquisition will be degraded, leading to rescanning and workflow delays. Several 
+studies have implicated poor focus as the main culprit for poor image quality in WSI19-21. For 
+augmented reality microscopy, defocus blur can occur to the captured images due to the optical 
+path length difference between the eyepiece ports and the camera port. This optical path length 
+difference varies for different objective lenses. As a result, it is challenging to maintain the in-
+focus position for the camera when the pathologist keeps switching to different objective lenses in 
+the slide reviewing process. Furthermore, some pathologists may have certain vision conditions 
+such as myopia. Instead of adjusting the diopter on the eyepieces, they may prefer to adjust the 
+focus knob to bring the sample into focus for their eye observation. The captured image through 
+the camera port, on the other hand, will be out-of-focus due to the introduced optical path length 
+difference. To address these challenges in augmented reality microscopy, a real-time autofocusing 
+module is needed to acquire high-quality, in-focus images at high speed.    
+Here we review and discuss different autofocusing techniques for WSI and automated 
+microscopy in general. A list of commercially-available WSI scanners and automated microscopy 
+systems are provided in Table 1. The employed autofocusing techniques are listed in the last 
+column and they can be categorized into three groups: 1) pre-scan focus map approach, 2) real-
+time reflective autofocusing, and 3) real-time image-based autofocusing. In the following, we will 
+first review the traditional pre-scan focus map approach in Section 2. We will discuss the choice 
+of different focus measures for determining the best focal position. In Section 3, we will review 
+the reflective autofocusing approaches, including intensity detection via confocal pinhole, 
+This article is protected by copyright. All rights reserved.
+ 
+Figure 7. Beam splitter array for real-time image-based autofocusing. A beam splitter array is used to split and direct 
+the light beam to different regions on the focusing sensor. As such, the system can capture images at multiple focal 
+planes for determining the optimum focus position. Modified from Ref. 115.     
+4.3. Tilted sensor   
+The tilted sensor approach uses a tilted focusing sensor to image an oblique cross-section of the 
+sample. The optimum focus position can be inferred by locating the peak of the contrast curve in 
+real time. The concept of this approach was originally proposed in a patent by Dong et al. in 
+2005120. There are some further refinements and developments of this original concept by 
+Philips121-126 and Leica127, 128. Arguably, it is one of the most successful autofocusing technologies 
+employed in existing commercially available WSI systems. 
+ 
+ 
+This article is protected by copyright. All rights reserved.
+ 
+triangulation with oblique illumination, and low-coherence interferometry. In Section 4, we will 
+review and discuss various real-time image-based autofocusing approaches, including tilted 
+sensor, independent dual sensor scanning, beam splitter array, phase detection, dual-LED 
+illumination, and deep-learning approaches. The technical concepts, merits, and limitations of 
+these methods are explained and compared to those of a traditional focus map approach. In Section 
+5, we will summarize our discussion and provide perspectives for future development. This review 
+may provide new insights for the development of high-throughput automated microscopy systems 
+that can be made broadly available and utilizable without loss of capacity. 
+ 
+ Vendor Model Imaging 
+mode 
+ Slide 
+capacity 
+ Scanning speed 
+(15 mm x 15 
+mm region) 
+ Sensor type Autofocusing 
+method 
+Zeiss Axio Scan.Z1 Brightfield, 
+Fluorescence 
+ 12 or 100 
+slides 20× 240 sec/slide 3 CCD sensor, 
+sCMOS sensor Focus map 
+Olympus VS200 
+ Brightfield, 
+Darkfield, 
+ Phase contrast, 
+Polarization, 
+Fluorescence 
+ 210 slides 20×: 80 sec/slide Area sensor Focus map 
+Hamamatsu NanoZoomer 
+S360 Brightfield 360 slides 20×: ~30 sec/slide 
+40×: ~30 sec/slide TDI sensor Focus map 
+Huron TissueScope 
+LE120 Brightfield 120 slides 20×: <60 sec/slide Area sensor Focus map 
+Ventana iScan HT Brightfield 360 slides 20×: <45 sec/slide 
+40×: <72 sec/slide 
+ Information 
+not available Focus map 
+Leica 
+ Aperio AT2 
+DX Brightfield 6 or 400 
+slides 20×: <72 sec/slide TDI sensor Focus map 
+Aperio GT 450 Brightfield 450 slides 40×: 32 sec/slide TDI sensor Tilted sensor 
+3DHistech 
+ Pannoramic 
+1000 Brightfield 1000 
+slides 
+ 20×:<60 sec/slide 
+40×:<60 sec/slide Area sensor Focus map 
+Pannoramic 
+250 Flash III 
+ Brightfield, 
+Fluorescence 250 slides 20×: 35 sec/slide 
+40×: 95 sec/slide 
+ 3 CCD sensor, 
+sCMOS sensor Focus map 
+Philips Ultra fast 
+scanner Brightfield 300 slides 40×: 60 sec/slide TDI sensor Tilted sensor 
+Nikon Eclipse Ti2 
+(Perfect Focus) 
+ Brightfield, 
+ Phase contrast, 
+Fluorescence 
+ 1 slide Not available Area sensor 
+ Triangulation 
+with oblique 
+illumination 
+Olympus IXplore 
+(TruFocus) 
+ Brightfield, 
+ Phase contrast, 
+Fluorescence 
+ 1 slide Not available Area sensor 
+ Triangulation 
+with oblique 
+illumination 
+Thorlabs EV103 Brightfield, 
+Fluorescence 4 slides 20×: <70 sec/slide 
+40×:<200sec/slide TDI sensor Low-coherence 
+interferometry 
+This article is protected by copyright. All rights reserved.
+ 
+Figure 8. Tilted sensor for real-time image-based autofocusing. (a) The optical scheme, where a tilted sensor is used 
+to infer the optimum focus position during the scanning process. (b) The overlapping position between the focusing 
+sensor and the parfocal imaging plane is termed ‘parfocal point’. (c) Contrast curve for determining the optimal focus 
+position. The pixel distance (ΔN) between the parfocal point and the peak contrast point indicates a physical distance 
+by which one needs to adjust the objective lens for optimal focusing. Modified from Ref. 127.  
+ 
+ Figure 8 shows the principle and operation of the tilted sensor concept. In Figure 8(a), the 
+focusing sensor is tilted at θ angle with respect to the parfocal image plane. The imaging and 
+focusing sensors can be either 2D area sensors or 1D linear sensors. The overlapping position 
+between the focusing sensor and the parfocal imaging plane is termed ‘parfocal point’ in Figure 
+8(b). The focusing range is determined by Zrange. With a larger tilted angle, a longer focusing range 
+can be expected.  
+During the scanning process, both sensors capture images of the sample. For each pixel of the 
+captured data, a contrast value can be determined based on the surrounding pixel values. Consider 
+a 1D image data 𝐼𝐼(𝑥𝑥) as an example, the contrast value 𝐶𝐶(𝑥𝑥) can be calculated via 𝐶𝐶(𝑥𝑥) =
+∑ |𝐼𝐼(𝑥𝑥) − 𝐼𝐼(𝑥𝑥 − 𝑚𝑚)|𝑠𝑠=𝑀𝑀𝑠𝑠=−𝑀𝑀 , where m define the surrounding range for the calculation. A contrast 
+curve can then be obtained by dividing the focusing sensor contrast value 𝐶𝐶𝑓𝑓𝑟𝑟𝐿𝐿𝐺𝐺𝐺𝐺 by the imaging 
+sensor contrast value 𝐶𝐶𝐺𝐺𝑠𝑠𝑇𝑇𝑇𝑇𝐵𝐵, as shown in Figure 8(c). The peak of the contrast curve determines 
+the pixel having the highest contrast value, i.e., the best focal position. The parfocal point can also 
+be plotted on the contrast curve. In Figure 8(c), the pixel distance ΔN between the parfocal point 
+and the peak contrast point on the curve indicates a physical distance along the axial direction. 
+This distance represents the distance between the current position of the objective lens and the 
+optimal focus position of the objective lens, i.e., one needs to axially move the objective lens by 
+this distance for best focusing. While the imaging sensor is centered at the field of view of the 
+objective lens, the focusing sensor can be shifted away from the center of the field of view. As 
+such, the focusing sensor ‘sees’ the image data before the imaging sensor ‘sees’ the same region.  
+This article is protected by copyright. All rights reserved.
+ 
+Omnyx 
+(now 
+Inspirata) 
+ VL120 Brightfield 120 slides 40×: 80 sec/slide 
+60×: 200 sec/slide Area sensor 
+ Independent 
+dual sensor 
+scanning 
+Table 1. A list of commercially-available WSI scanners and automated microscopy systems. Note: every attempt was 
+made to include accurate data in this table at the time of writing this article. The autofocusing methods were best 
+estimated based on the product instruction manuals and related patents.  
+2. Focus map surveying  
+Focus map surveying is the most adopted autofocusing method in commercially available WSI 
+systems. Manufactories are in favor of using this approach because of two main reasons: 1) it 
+requires no additional optical hardware and is robust for different types of samples, and 2) no or 
+less intellectual property issue. Here we will first discuss the choice of focus measure in Section 
+2.1. We will then discuss focus map generation and focus quality control in Section 2.2.  
+2.1. Z-stack acquisition and focus-measure calculation 
+The principle of this method is shown in Figure 1, where the camera is used to acquire z-stack 
+images of the specimen when the sample or the objective lens is axially scanned to different 
+positions. From the resulting z-stack, a certain figure of merit of each image, such as image 
+contrast, entropy, spatial frequency content, is extracted for measuring the quality of focus. It is 
+also common to acquiring images while calculating the figure of merit, and choosing the image 
+corresponding to the peak (or valley) of the figure of merit, or by performing a search to optimize 
+the figure of merit. By repeating this searching process for different tiles of the microscope slide, 
+the well-focused digital whole slide image can be obtained.  
+ 
+ This article is protected by copyright. All rights reserved.
+ 
+Similarly, a ‘volume camera’ consisted of multiple linear CCDs coupled with fibers can be 
+arranged with a tilted angle for autofocusing129. Bravo et al reported the use of 9 sensors coupled 
+with fibers to acquire images at different focal planes for real-time image-based autofocusing44.   
+4.4. Phase detection  
+Phase detection autofocusing has been used in most digital single-lens reflex cameras (DLSR)130. 
+It is typically achieved by dividing the incoming light into pairs of images. It then measures the 
+distance between the two images and infers the defocus amount. The ‘phase’ here is referred to 
+the translational shift between the two images (or the phase shift in the Fourier domain).  
+Inspired by the phase detection concept in photography, we have developed an autofocusing 
+add-on kit to perform WSI using a regular microscope131. As shown in Figure 9(a), two pinhole-
+modulated cameras are attached to the eyepiece for phase detection autofocusing. By adjusting the 
+positions of the pinholes, one can effectively change the view angles through the two eyepiece 
+ports. If the sample is placed at the in-focus position, the two captured images will be identical. If 
+the sample is placed at an out-of-focus position, the sample will be projected at two different view 
+angles, causing a translational shift in the two captured images. The translational shift is 
+proportional to the defocus distance of the sample. Therefore, by identifying the translational shift 
+of the two captured images via phase correlation, the optimal focal position of the sample can be 
+recovered without a z-scan.  
+ 
+ This article is protected by copyright. All rights reserved.
+ 
+ 
+Figure 1. The traditional axial scanning procedure for autofocusing. For a selected region of interest, a z-stack is 
+acquired and used to determine the focus position using a certain figure of merit.  
+ 
+ An important aspect of this approach is to choose a proper figure of merit to measure the quality 
+of focus. When the specimen is in focus, the captured image should demonstrate large image 
+contrast, a large range of intensity values, and sharp edges. Quantitatively, a good figure of merit 
+should be acutely sensitive to focus, monotonically decreasing and symmetric about the peak, and 
+contains no prominent local maxima outside of the peak, as shown in Figure 1. Accuracy is clearly 
+of utmost importance. In the case of WSI and automated microscopy, minimizing the computation 
+time is also critical.  
+Several previous studies have evaluated and compared a list of common focus measures22-27. 
+Table 2 lists a dozen common focus measures that are intuitive and computationally simple. In 
+general, they can be categorized into 4 groups23: (1) derivative-based measures such as Brenner 
+gradient, Tenenbaum gradient, energy Laplace, Gaussian derivative, sum of wavelet coefficients, 
+ratio of wavelet coefficients, power-weighted average, and power log-log slope, (2) statistical-
+based measures such as image contrast, normalized variance, auto-correlation, and standard 
+deviation-based correlation, (3) histogram-based measures such as histogram range, histogram 
+entropy, and weight histogram sum, and (4) intuitive-based measures such as thresholded content.   
+With a chosen focus measure for certain applications, the next step is to estimate the focus 
+position using the calculated focus measure from the acquired images. A fitted function can be 
+used to find the peak (or valley) from the figure of merit data points, obviating the need to acquire 
+This article is protected by copyright. All rights reserved.
+ 
+ 
+Figure 9. Phase detection for real-time image-based autofocusing. (a) Two pinhole-modulated cameras are attached 
+to the eyepiece ports for phase detection autofocusing. If the sample is placed at an out-of-focus position, it will be 
+imaged at two different view angles, causing a translational shift in the two captured images through the eyepiece 
+ports. Modified from Ref. 131. (b) A dual-pinhole mask is placed at the pupil plane for light modulation. The captured 
+image from the focusing sensor contains two copies of the object and the defocus distance can be recovered based on 
+the translational shift between the two copies. Modified from Ref. 132. (c) A wedge plate is inserted into the pupil plane 
+to direct half of the beam to a slightly tilted angle. As such, the captured image from the focusing sensor contains two 
+copies of the sample separated by a certain distance. Similarly, the defocus distance can be recovered from the 
+translational shift of the two copies. Modified from Ref. 133. 
+ 
+Figure 9(b) shows another autofocusing configuration using the phase detection concept132. A 
+dual-pinhole mask is placed at the pupil plane to modulate the light from the sample. Instead of 
+using two pinhole-modulated cameras, only one focusing sensor is used to capture the image 
+modulated by the dual-pinhole mask. In this case, the captured image from the focusing sensor 
+contains two copies of the sample and the translational shift of these two copies is proportional to 
+the defocus distance. Inset of Figure 9(b) shows a raw image captured by the focusing sensor, 
+This article is protected by copyright. All rights reserved.
+ 
+images near the focus. The choice of curve fitting model directly affects the number of images 
+needed. Typical fitting models include polynomial28, Lorentzian25, and Gaussian models29, 30. A 
+polynomial fit may closely approximate the figure of merit data points that are close to the focal 
+plane. An nth-order function, however, requires a minimum of n+1 images to be acquired, thus 
+drastically increasing image acquisition time when a higher-order fitting curve is employed. It may 
+also fail if the focus plane is substantially outside of the depth of field. Yazdanfar et al. have 
+demonstrated a Lorentzian function for fitting the Brenner gradient focus measure25. Using this 
+empirical model, only 3 images are needed to determine the focal plane. Similarly, Gaussian fitting 
+model with 3 unknown parameters has been demonstrated for fluorescence microscopy with an 
+electrically tunable lens30. The choice of fitting model is an important topic for each of the chosen 
+focus measure and the related microscopy applications. Further research in this direction is highly 
+desired.   
+ 
+Focus measure Equation Comments 
+Brenner gradient31 𝐹𝐹𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵 = ∑ ∑ �𝐼𝐼(𝑥𝑥 + 2, 𝑦𝑦) − 𝐼𝐼(𝑥𝑥, 𝑦𝑦)�2
+𝑦𝑦𝑥𝑥 , where 𝐼𝐼(𝑥𝑥, 𝑦𝑦) is the 
+captured 2D intensity image. 
+ High autofocusing accuracy for 
+different samples23, 25. 
+Tenenbaum 
+gradient32 
+ 𝐹𝐹𝑇𝑇𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝑇𝑇𝐵𝐵𝑇𝑇𝑇𝑇 = ∑ ∑ (𝑆𝑆𝑥𝑥(𝑥𝑥, 𝑦𝑦)2 + 𝑆𝑆𝑦𝑦(𝑥𝑥, 𝑦𝑦)2)𝑦𝑦𝑥𝑥 , where 𝑆𝑆𝑥𝑥(𝑥𝑥, 𝑦𝑦) and 
+𝑆𝑆𝑦𝑦(𝑥𝑥, 𝑦𝑦) are the resultant images by convoluting 𝐼𝐼(𝑥𝑥, 𝑦𝑦) with the 
+kernels [-1 0 1; -2 0 2; -1 0 1] and [1 2 1;0 0 0;-1 2 -1], respectively.           
+Well performed for subsampled 
+images and robust to random 
+noises23, 33. 
+Energy Laplace34 𝐹𝐹𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝐵𝑇𝑇𝑦𝑦_𝐿𝐿𝑇𝑇𝐿𝐿𝐿𝐿𝑇𝑇𝐿𝐿𝐵𝐵 = ∑ ∑ [𝐼𝐼(𝑥𝑥 − 1, 𝑦𝑦) + 𝐼𝐼(𝑥𝑥 + 1, 𝑦𝑦) + 𝐼𝐼(𝑥𝑥, 𝑦𝑦 − 1) +𝑦𝑦𝑥𝑥
+𝐼𝐼(𝑥𝑥, 𝑦𝑦 + 1) + 4𝐼𝐼(𝑥𝑥 − 1, 𝑦𝑦)]2  
+ Well performed for tuberculosis 
+detection33, 35. 
+Gaussian derivative36 
+ 𝐹𝐹𝐺𝐺𝑇𝑇𝐺𝐺𝐺𝐺𝐺𝐺𝐺𝐺𝑇𝑇𝐵𝐵 = 1
+𝑋𝑋∙𝑌𝑌 ∑ ∑ [𝐼𝐼(𝑥𝑥, 𝑦𝑦) ∗ 𝐺𝐺𝑥𝑥(𝑥𝑥, 𝑦𝑦, 𝜎𝜎)]2 + �𝐼𝐼(𝑥𝑥, 𝑦𝑦) ∗𝑦𝑦𝑥𝑥
+𝐺𝐺𝑦𝑦(𝑥𝑥, 𝑦𝑦, 𝜎𝜎)�2, where 𝐺𝐺𝑥𝑥 and 𝐺𝐺𝑦𝑦 are the first-order Gaussian 
+derivatives in x- and y-direction at scale 𝜎𝜎. 
+ Robust against noises with a 
+proper selection of parameter 𝜎𝜎36. 
+Sum of wavelet 
+coefficients37, 38 
+ 𝐹𝐹𝐺𝐺𝐺𝐺𝑠𝑠_𝑤𝑤𝑇𝑇𝑤𝑤𝐵𝐵𝐿𝐿𝐵𝐵𝑤𝑤 = ∑ |𝑊𝑊𝐻𝐻𝐿𝐿(𝑥𝑥, 𝑦𝑦)| + |𝑊𝑊𝐿𝐿𝐻𝐻(𝑥𝑥, 𝑦𝑦)| + |𝑊𝑊𝐻𝐻𝐻𝐻(𝑥𝑥, 𝑦𝑦)|𝜔𝜔 , where 
+𝜔𝜔 is the corresponding window in the DWT sub-regions. 𝑊𝑊𝐻𝐻𝐻𝐻, 𝑊𝑊𝐿𝐿𝐻𝐻 
+and 𝑊𝑊𝐻𝐻𝐻𝐻 are the level-1 two-dimension DWT sub-regions. 
+ A common derivative-based focus 
+measure37, 38. 
+Ratio of wavelet 
+coefficients39 
+ 𝐹𝐹𝐵𝐵𝑇𝑇𝑤𝑤𝐺𝐺𝑟𝑟_𝑤𝑤𝑇𝑇𝑤𝑤𝐵𝐵𝐿𝐿𝐵𝐵𝑤𝑤 = 𝑀𝑀𝐻𝐻2 𝑀𝑀𝐿𝐿2⁄ , 𝑀𝑀𝐻𝐻2 = ∑ ∑ 𝑊𝑊𝐻𝐻𝐿𝐿𝐵𝐵(𝑥𝑥, 𝑦𝑦)2 +𝑥𝑥𝑦𝑦𝐾𝐾
+𝑊𝑊𝐿𝐿𝐻𝐻𝐵𝐵(𝑥𝑥, 𝑦𝑦)2 + 𝑊𝑊𝐻𝐻𝐻𝐻𝐵𝐵(𝑥𝑥, 𝑦𝑦)2 , 𝑀𝑀𝐿𝐿2 = ∑ 𝑊𝑊𝐿𝐿𝐿𝐿𝐾𝐾(𝑥𝑥, 𝑦𝑦)2𝑥𝑥𝑦𝑦 , where 𝑊𝑊𝐿𝐿𝐿𝐿𝐿𝐿 is 
+the Kth level DWT low-frequency sub-region. 𝑊𝑊𝐻𝐻𝐻𝐻𝐻𝐻, 𝑊𝑊𝐿𝐿𝐻𝐻𝐵𝐵 
+and 𝑊𝑊𝐻𝐻𝐻𝐻𝐵𝐵 are the level-n two-dimension DWT sub-regions. 
+ Well performed for common 
+microscopic images39. 
+Power-weighted 
+average40, 41 
+ 𝐹𝐹𝐺𝐺𝐵𝐵𝑇𝑇𝐵𝐵𝑥𝑥(𝑧𝑧) = ∑ ∑ [𝑓𝑓(𝑥𝑥, 𝑦𝑦) ∗ 𝐼𝐼𝑧𝑧(𝑥𝑥, 𝑦𝑦)]2𝑦𝑦𝑥𝑥 �∑ ∑ 𝐼𝐼𝑧𝑧(𝑥𝑥, 𝑦𝑦)𝑦𝑦𝑥𝑥 �2�  and 
+𝐹𝐹𝐿𝐿𝑟𝑟𝑤𝑤𝐵𝐵𝐵𝐵_𝑤𝑤𝐵𝐵𝐺𝐺𝑇𝑇ℎ𝑤𝑤 = ∑ 𝑧𝑧𝐹𝐹𝑧𝑧(𝑧𝑧)𝑠𝑠𝑧𝑧 ∑ 𝐹𝐹𝑧𝑧(𝑧𝑧)𝑠𝑠𝑧𝑧⁄ , where 𝑓𝑓(𝑥𝑥, 𝑦𝑦) is high-pass 
+or band-pass filter, ∗ stands for the convolution operator, 𝐼𝐼𝑧𝑧(𝑥𝑥, 𝑦𝑦) is 
+the grey level intensity of pixel (x, y) at z position. m is an integer 
+chosen by the user for different applications. 
+ Well performed for phase-contrast 
+autofocusing40-44. 
+ 
+This article is protected by copyright. All rights reserved.
+ 
+where two copies of the sample can be seen from this image. The distance between the two copies 
+can be recovered via autocorrelation analysis shown in Figure 9(b).  
+Figure 9(c) shows a similar phase detection scheme by Silvestri et al.133. Same as the dual-
+pinhole modulation approach, only one camera is used for the focusing purpose. A wedge plate is 
+inserted into the pupil plane to direct half of the beam to a slightly tilted angle. As such, the 
+captured image from the focusing sensor contains two copies of the sample separated by a certain 
+distance. The defocus distance can be recovered from the translational shift of the two copies.  
+For the configurations shown in Figure 9(a) and 9(b), pinhole masks are used to restrict the 
+light at the pupil plane. Therefore, they have relatively long autofocusing ranges. The system in 
+Figure 9(c), on the other hand, has a short autofocusing range. Using the dual-pinhole mask does 
+not prevent its applications in fluorescence microscopy. One can choose a beam splitter cube to 
+direct the strong excitation light through the dual-pinhole mask. Weak fluorescence emissions 
+from the sample can be directed to the imaging camera. The configuration in Figure 9(b) has been 
+demonstrated for fluorescence WSI132.       
+4.5. Dual-LED illumination   
+Dual-LED illumination has recently been demonstrated for single-frame autofocusing while the 
+sample is in continuous motion134-138. Figure 10(a) shows one of the reported configurations where 
+two near-infrared LEDs are placed at the back focal plane of the condenser lens for sample 
+illumination134. These two LEDs illuminate the sample from two different incident angles and they 
+can be treated as spatially coherent light sources. A hot mirror is used to direct the near-infrared 
+light to the focusing sensor shown in Figure 10(a). As such, the captured image from the focusing 
+sensor contains two copies of the sample separated by a certain distance. In particular, the focusing 
+sensor is placed at a preset offset distance with respect to the imaging sensor. When the sample is 
+placed at the in-focus position, the captured image from the focusing sensor contains two copies 
+of the sample profile. Similar to the dual-pinhole mask approach, one can recover the defocus 
+distance by identifying the separation of the two copies through autocorrelation analysis. The 
+This article is protected by copyright. All rights reserved.
+ 
+Power log-log 
+slope45 
+ 𝐹𝐹𝑃𝑃𝐿𝐿𝐿𝐿𝑃𝑃 is the log-log slope of the one-dimensional power spectral 
+density 𝐹𝐹𝑃𝑃𝑃𝑃𝑃𝑃 of image I, where  𝐹𝐹𝑃𝑃𝑃𝑃𝑃𝑃 = log(𝑎𝑎𝑎𝑎𝑎𝑎(𝐹𝐹𝐹𝐹(𝐼𝐼))2) and FT 
+denotes as Fourier transform.  
+ Well performed for focus quality 
+control in high-content screening45, 
+46.  
+Image contrast25 𝐹𝐹𝐿𝐿𝑟𝑟𝐵𝐵𝑤𝑤𝐵𝐵𝑇𝑇𝐺𝐺𝑤𝑤 = (𝐼𝐼𝑠𝑠𝑇𝑇𝑥𝑥 − 𝐼𝐼𝑠𝑠𝐺𝐺𝐵𝐵) (𝐼𝐼𝑠𝑠𝑇𝑇𝑥𝑥 + 𝐼𝐼𝑠𝑠𝐺𝐺𝐵𝐵)⁄ , where 𝐼𝐼𝑠𝑠𝑇𝑇𝑥𝑥 and 𝐼𝐼𝑠𝑠𝐺𝐺𝐵𝐵 are 
+the maximum and minimum grey level intensity, respectively.  
+ A common statistical-based focus 
+measure25. 
+Normalized 
+variance22 
+ 𝐹𝐹𝐵𝐵𝑟𝑟𝐵𝐵𝑠𝑠𝐵𝐵𝑇𝑇_𝑤𝑤𝑇𝑇𝐵𝐵𝐺𝐺𝑇𝑇𝐵𝐵𝐿𝐿𝐵𝐵 = 1 (𝑋𝑋 ∙ 𝑌𝑌 ∙ 𝜇𝜇)⁄ ∑ ∑ (𝐼𝐼(𝑥𝑥, 𝑦𝑦) − 𝜇𝜇)2𝑦𝑦𝑥𝑥 , where 𝜇𝜇 is the 
+mean gray level of the image. 
+ Well performed for blood smear 
+and pap smear autofocusing23, 24, 26. 
+Auto-correlation47, 48 𝐹𝐹𝑇𝑇𝐺𝐺𝑤𝑤𝑟𝑟𝐿𝐿𝑟𝑟𝐵𝐵𝐵𝐵 = ∑ ∑ 𝐼𝐼(𝑥𝑥, 𝑦𝑦) ∙ 𝐼𝐼(𝑥𝑥 + 1, 𝑦𝑦)𝑦𝑦𝑥𝑥 − ∑ ∑ 𝐼𝐼(𝑥𝑥, 𝑦𝑦) ∙ 𝐼𝐼(𝑥𝑥 + 2, 𝑦𝑦)𝑦𝑦𝑥𝑥  Well performed for fluorescence 
+microscopy23, 49. 
+Standard deviation-
+based correlation47, 48 𝐹𝐹𝐿𝐿𝑟𝑟𝐵𝐵𝐵𝐵_𝐺𝐺𝑤𝑤𝑇𝑇𝑇𝑇𝐵𝐵𝑤𝑤 = ∑ ∑ 𝐼𝐼(𝑥𝑥, 𝑦𝑦) ∙ 𝐼𝐼(𝑥𝑥 + 1, 𝑦𝑦)𝑦𝑦𝑥𝑥 − 𝑋𝑋 · 𝑌𝑌 ∙ 𝜇𝜇2  Robust to noises23. 
+Histogram range50 𝐹𝐹𝐵𝐵𝑇𝑇𝐵𝐵𝑇𝑇𝐵𝐵 = max𝐼𝐼 (ℎ(𝐼𝐼) > 0) − m𝑖𝑖𝐻𝐻𝐼𝐼 (ℎ(𝐼𝐼) > 0) , where ℎ(𝐼𝐼) is image 
+histograms (i.e., the number of pixels with intensity 𝐼𝐼 in an image). 
+ Performance depends on samples 
+and imaging methods23, 50. 
+Histogram entropy50 𝐹𝐹𝐵𝐵𝐵𝐵𝑤𝑤𝐵𝐵𝑟𝑟𝐿𝐿𝑦𝑦 = − ∑ 𝑝𝑝𝐼𝐼 · log2(𝑝𝑝𝐼𝐼)𝐼𝐼 , where 𝑝𝑝𝐼𝐼 = ℎ(𝐼𝐼) (𝑋𝑋 ∙ 𝑌𝑌)⁄ is the 
+probability of a pixel with intensity 𝐼𝐼. 
+ Well performed for sinusoidal and 
+binary images50.   
+Weight histogram 
+sum26, 51 
+ 𝐹𝐹𝑊𝑊𝐻𝐻𝑃𝑃 = ∑ ��ℎ(𝐼𝐼)5 ∙ 𝐼𝐼(𝑥𝑥, 𝑦𝑦)5 ∙ 10−15�𝐼𝐼 , where the fifth root and fifth 
+potency are empirical results. 
+ Well performed for fluorescence 
+bacterial samples26, 51. 
+Thresholded 
+content22, 52 𝐹𝐹𝑤𝑤ℎ_𝐿𝐿𝑟𝑟𝐵𝐵𝑤𝑤 = ∑ ∑ 𝐼𝐼(𝑥𝑥, 𝑦𝑦)𝑦𝑦𝑥𝑥 , where 𝐼𝐼(𝑥𝑥, 𝑦𝑦) ≥ 𝜃𝜃. 𝜃𝜃 is the threshold Fast computation; a good choice 
+for the coarse searching26. 
+Table 2. Common figure of merits for measuring the focus quality. 
+The focus measures listed in Table 2 are mainly designed for incoherent microscopy with 
+intensity-only measurements. Another important property of light wave is phase, which 
+characterizes the optical delay accrued during propagation. Light detectors such as image sensors 
+and photographic plates can only measure intensity variation of the light waves. Phase information 
+is lost during the recording process. Consequently, phase measurement often involves additional 
+experimental complexity, typically by requiring light interference with a known field53, 54, or via a 
+phase retrieval process where the complex amplitude is recovered from intensity measurements55.  
+Coherent microscopy uses both intensity and phase as the focus measure. The autofocusing 
+process can be performed after the data has been acquired. As one example, Fourier ptychography 
+is a coherent microscopy technique that has been demonstrated for WSI56. Unlike in conventional 
+microscopy where resolution and imaging field of view need to be traded off against each other, 
+Fourier ptychography can achieve both high resolution and wide field of view via a low-NA 
+objective lens and angle-varied illumination. Regular WSI platform stitches the captured intensity 
+images in the spatial domain to expand the field of view. Fourier ptychography, on the other hand, 
+This article is protected by copyright. All rights reserved.
+ 
+preset offset arrangement in Figure 10(a) is used to improve the accuracy of autocorrelation 
+analysis when the defocus distance is small. It can also generate out-of-focus contrast for 
+transparent specimens. If the sample motion direction is perpendicular to the direction of the 
+translational shift, the autofocusing process can be implemented even with continuous sample 
+motion. This dual-LED scheme has also been demonstrated for focus map surveying with only one 
+main camera136.   
+ 
+ 
+Figure 10. Dual-LED illumination for single-frame autofocusing. (a) Two near-infrared LEDs are placed at the back 
+focal plane of the condenser lens for illuminating the sample from two different angles. A hot mirror is used to direct 
+the near-infrared light to the focusing sensor with a preset offset. The defocus distance is related to the separation of 
+the two-copy image captured by the focusing sensor. (b1) Color-multiplexed dual-LED illumination for single-frame 
+autofocusing. A red and a green LED are turned on for generating a red and green copy on the color image sensor. 
+(b2) OpenWSI system based on the color-multiplexed dual-LED autofocusing scheme. Modified from Ref.138.     
+ 
+ Figure 10(b1) shows a further development of the dual-LED approach using color multiplexed 
+illumination137, 138. In this scheme, a color LED array is used for sample illumination. For regular 
+brightfield image acquisition, all LED elements are turned on as shown in the left part of Figure 
+10(b1). In between two brightfield acquisitions, a red and a green LED are turned on for color-
+This article is protected by copyright. All rights reserved.
+ 
+stitches the information in the Fourier domain to expand the spatial frequency bandwidth. 
+Autofocusing of Fourier ptychography is performed in the ptychographic phase retrieval process57, 
+58, where the defocus pupil aberration can be jointly recovered with the complex object59-61. At the 
+end of the reconstruction, the synthesized information in the Fourier domain generates a high-
+resolution, complex-valued object image that retains the original large field of view set by the low-
+NA objective lens. Similar coherent imaging procedures can also be performed at the detection 
+path via aperture or diffuser modulation62-67. In this case, the recovered complex wavefront can be 
+digitally propagated to any plane along the optical axis after reconstruction. A focus measure with 
+both intensity and phase can be used to determine the best focal plane of the object68-78. A detailed 
+discussion on coherent microscopy and the related focus measures are beyond the scope of this 
+review article. In the following, we focus our discussions on regular incoherent microscopy.  
+ 
+2.2. Focus map, skipping tiles, and focus quality control     
+By repeating the z-stack autofocusing process for every tile, it is straightforward to generate a 
+high-resolution, well-focused whole slide image of the specimen. However, as indicated above, 
+the autofocusing process can take a significant amount of time to acquire z-stacks at multiple 
+positions. Assuming a rate of 20 frames per second to acquire images, surveying focus at 5 
+different focal positions would take 0.25 seconds per tile. As a result, an image with 500 tiles can 
+take as much as 150 seconds to acquire, not including the deceleration, acceleration, settling time 
+for moving the slide to different lateral and axial positions. Therefore, it is not a feasible solution 
+to perform autofocusing on every tile using the traditional image-based focus measure approach. 
+To address the time burden, many WSI systems create a focus map prior to scanning, or survey 
+focus points every n tiles or lines, in effect skipping areas to save time6. The number and the 
+locations of the focus points are often made user selectable.  
+Figure 2(a) shows the procedures of the focus map surveying approach. The system will first 
+select focus points based on the sample’s feature and distribute them evenly over the entire slide. 
+Each focus point is triangulated to create a focus map of the tissue surface, in effect filling in the 
+This article is protected by copyright. All rights reserved.
+ 
+multiplexed illumination. If the sample is placed at an out-of-focus position, the red and the green 
+copy will be separated by a certain distance, as shown in the insets of Figure 10(b1). One can then 
+identify the translational shift of the red- and green-channel images by maximizing the image 
+mutual information or cross-correlation139, 140. The resulting translational shift is used for dynamic 
+focus correction in the scanning process.  
+Figure 10(b2) shows an open-source WSI platform, termed OpenWSI, based on the color-
+multiplexed dual-LED autofocusing scheme138. This OpenWSI platform is built with low-cost, 
+off-the-shelf components including a programmable LED array, a photographic lens, and a 
+computer numerical control (CNC) router. Coarse axial adjustment is performed using the CNC 
+router and the precise adjustment is performed using the ultrasonic motor ring within the 
+photographic lens. The system has a resolution of ~0.7 µm using a 20X objective lens. It can 
+acquire a whole slide image of 225 mm2 region in ~2 mins. Since a programable LED array is used 
+for sample illumination in this system, it can also be used for quantitative phasing imaging via 
+Fourier ptychography.     
+4.6. Deep learning approaches   
+Deep learning has been demonstrated as a powerful tool for solving inverse problems. With the 
+advent of accelerated computing and deep learning frameworks such as TensorFlow and PyTorch, 
+researchers have also explored various deep learning-based solutions for autofocusing21, 92, 139-150. 
+As shown in Figure 11, the reported deep-learning solutions can be, in general, categorized into 
+two groups.  
+ 
+ This article is protected by copyright. All rights reserved.
+ 
+blanks. Delaunay triangulation is a typical method for generating the focus map6. As shown in 
+Figure 2(b), line scanners typically achieve better autofocusing performance than traditional 2D 
+area sensors because linear sensors can change focus at a shorter interval.  
+Regular 1D and 2D image sensors need to have high illumination intensity to quickly register 
+light levels before the sample motion causes smearing of the image. Time delay integration (TDI) 
+sensor overcomes this illumination limitation by having multiple rows of elements that each shift 
+their partial measurements to the adjacent row synchronously with the motion of the image across 
+the array of elements44. TDI sensors are often the choice of low-light applications such as 
+fluorescence microscopy with low photon budgets. The disadvantage of TDI sensor is the 
+requirement of precisely synchronized sample scanning for generating an image. Rescan of the 
+sample is needed for imaging multiple depths or fluorescence channels. Precise co-localization of 
+different depths or different fluorescence colors can be a challenge for post-acquisition processing. 
+The use of TDI sensors also lacks the imaging flexibility for research microscopy in general.    
+An alternative approach to generating the focus map is to perform autofocusing in every n tiles, 
+termed ‘skipping tiles’ in Figure 2(b). In this case, it assumes the focused tile shares the same focus 
+position with its adjacent tiles. The focusing performance is, however, worse than the focus map 
+approach as it may contain more out-of-focus regions as shown in Figure 2(b). The skipping tiles 
+approach, on the other hand, does not need to travel back to a certain axial position with sub-
+micron accuracy. The requirement of motion repeatability is not as stringent as that in the focus 
+map approach. Nevertheless, more focus points can increase the accuracy of the overall focusing 
+performance for both approaches, at the expense of additional time for autofocusing.    
+ 
+ This article is protected by copyright. All rights reserved.
+ 
+ 
+Figure 11. Deep learning approaches for autofocusing. (a) A neural network is trained to output the defocus distance 
+from an input defocused image. (b) A neural network is trained to output an in-focus image based on the input 
+defocused image.  
+ 
+ The first group is to predict the defocus distance or to locate the out-of-focus regions based on 
+one or more input defocused images21, 92-94, 140, 141, 144, 147, 149, 150. For example, Jiang et al. employed 
+a convolutional neural network (CNN) to estimate the defocus distance based on the transform- 
+and multi-domain inputs141. By adding the Fourier spectrum and the autocorrelation of the spatial 
+image as the input, the performance and the robustness can be improved compared to that only 
+with the spatial image as the input. Dastidar et al. further improved the performance by using the 
+difference of two defocused images as the input of the CNN140. Shajkofci et al. reported the use of 
+a CNN-based sharpness function as the focus measure for three-shot autofocusing147. Pinkard et 
+al. designed a fully connected Fourier neural network with the additional off-axis LEDs as the 
+illumination source to predict the defocus distance144. Yang et al.94 and Kohlberger et al.21 have 
+developed networks to quantify and localize the out-of-focus regions in WSI. The severity of the 
+out-of-focus regions is treated as a classification problem with 30 classes21. 
+The second group of developments is to output an in-focus image based on an input defocused 
+image142, 143, 146, 148. The network is, essentially, to perform blind deconvolution. Typically network 
+architectures include U-net151 and conditional generative adversarial network (cGAN)152. For 
+This article is protected by copyright. All rights reserved.
+ 
+      
+Figure 2. (a) Focus map generation procedures. The green bars represent the calculated figure of merits at different 
+focus points. The red bars represent the interpolated focus points. (b) Comparison between the focus map approach 
+and the skipping tiles approach. The green crosshairs represent the focus points used to calculate the focus map. The 
+blue dashed lines represent the focus positions interpolated between the selected focus points. Red boxes represent the 
+focal plane for each field of view using a 2D image sensor or a 1D linear sensor. Each red box can be adjusted in the 
+z-axis during a scan. Modified from Ref. 6. 
+ 
+After the high-resolution specimen images are acquired, it is often necessary to review the 
+images for focus quality control and determine whether certain regions need to be re-scanned. 
+Similarly, in high-content screening for drug discovery and genome analysis, it is important to 
+identify out-of-focus images for obtaining a clean, unbiased image dataset. Complicating this task 
+is the fact that one only has a single-z-depth image instead of a z-stack for analysis. An absolute 
+measure of image focus on a single image in isolation, without other user-specified parameters, is 
+needed in this case. In the past years, various approaches have been demonstrated for no-reference 
+focus quality assessment, including gradient map79-81, contrast map82-84, phase coherency85, 86, 
+cumulative probability of blur detection87, 88, visual system’s equalization of spatial frequency89, 
+among others. Jimenez et al. have tested several quality assessment metrics on a database of 
+This article is protected by copyright. All rights reserved.
+ 
+example, Wu et al. have employed a cGAN to virtually refocus a two-dimensional fluorescence 
+image onto user-defined three-dimensional (3D) surfaces by appending a pre-defined digital 
+propagation matrix148. It has also been shown that a blurry microscopy image acquired at an 
+arbitrary out-of-focus plane can be virtually refocused to the in-focus position143.       
+5. Summary and discussion  
+High-content images are desired in many fields of biomedical research as well as in clinical 
+applications. Accurate and high-speed autofocusing remains a challenge for WSI and automated 
+microscopy. This work has reviewed and discussed various autofocusing techniques from existing 
+patents and journal papers. The technical concepts, merits, and limitations of these methods are 
+explained and discussed. We summarize the advantages and disadvantages of these techniques in 
+Table 3. Among these techniques, the focus map approach is the most adopted technique in 
+existing WSI systems due to its simplicity and the absence of intellectual property issues. The 
+tilted sensor approach is another very successful technique employed in current Leica and Philips 
+WSI systems. The recent dual-LED approach provides a cost-effective solution to develop WSI 
+systems that can be made broadly available and utilizable without loss of capacity. The deep 
+learning approach, on the other hand, is an emerging direction for tackling autofocusing problems 
+without hardware modification. Further work is desired for improving its robustness and the 
+generalization capability of handling different types of specimens.  
+Some of the autofocusing techniques discussed here can also be employed in the augmented 
+reality microscope system. For example, a secondary tilted sensor can be used for locating the 
+optimal focus position in real-time. A motorized stage can be used to drive the main camera for 
+capturing the in-focus, high-resolution sample images. 
+ 
+Autofocusing 
+approach  Advantages Disadvantages 
+Focus map 
+ ▪ No or less intellectual property issue 
+▪ Require no additional optical hardware  
+▪ Can be used for different imaging modalities  
+▪ Robust and widely adopted for WSI  
+ ▪ Require a z-stack for each focus point 
+▪ Mechanical repeatability is critical for sample 
+positioning 
+▪ Challenging to handle transparent specimens 
+This article is protected by copyright. All rights reserved.
+ 
+pathology slides and reported that the cumulative probability of blur detection is most effective 
+among the 6 tested metrics86. Another emerging direction for focus quality control is to convert 
+the image assessment process into a classification task using a neural network21, 90-94. For example, 
+Senaras et al. reported a ‘DeepFocus’ network to identify out-of-focus regions in histopathological 
+images92. Discussions of deep-learning approaches will be given in Section 4.6.     
+3. Reflective-based autofocusing  
+Reflective-based autofocusing aims to detect the axial location of a reference plane, which is 
+usually the interface between glass and liquid where the cells residue or the air-glass interface at 
+the bottom of the cell culture vessels. During experiments, the focus drift correction system will 
+repetitively find the axial location of the reference plane and maintain a constant distance between 
+the objective lens and the reference plane through a motorized axial driver. In Section 3.1, we will 
+discuss a confocal pinhole approach to locate the interfaces. In Section 3.2, we will discuss how 
+to use the reflective light displacement to locate the reference plane in real-time. In Section 3.3, 
+we will discuss a low-coherence interferometry approach to locate the sample switched by two 
+interfaces in real-time.     
+3.1. Confocal pinhole detection 
+Liron et al. reported a laser reflective autofocusing approach using confocal pinhole detection in 
+200695. The optical setup is shown in Figure 3, where a laser beam is expanded and focused onto 
+the substrate of the sample (highlighted in red). The reflective light from the substrate passes 
+through a confocal pinhole and reaches the photodetector (highlighted in yellow). The fraction of 
+laser intensity reflected at an interface is roughly proportional to the square of the refractive index 
+difference. For biological specimens located in water (or aqueous buffers) above a glass / plastic 
+plate, the reflection from the glass-air interface is about 4% of the incident beam and the reflection 
+from the glass-water interface is only 0.4%. The inset of Figure 3 shows a measured intensity curve 
+by axially scanning the objective lens to different positions. The first strong peak corresponds to 
+This article is protected by copyright. All rights reserved.
+ 
+Confocal pinhole ▪ High accuracy for locating the air-glass interface  
+ 
+ ▪ Require additional confocal optics 
+▪ Time-consuming for z-scan   
+▪ Reflection from other interfaces can be 
+overwhelmed by the strong signal from the air-glass 
+interface  
+Triangulation with 
+oblique illumination 
+ ▪ High accuracy for locating the air-glass surface of 
+a standard coverslip  
+▪ Real-time autofocusing  
+ ▪ Require additional illumination and detection 
+optics 
+▪ Only work for living cells housed in imaging 
+chambers with a standard coverslip. Cannot work 
+for microscope slides or thick plastic dish.  
+Low-coherence 
+interferometry 
+ ▪ Can handle transparent specimens 
+▪ Real-time autofocusing 
+ ▪ Expensive and complicated Fourier-domain OCT 
+setup 
+▪ Precise optical alignment needed  
+Independent dual 
+sensor scanning 
+ ▪ Real-time image-based autofocusing during 
+continuous sample motion 
+▪ Effectively avoid the ‘dead time’ of camera 
+readout   
+ ▪ Require a secondary area camera and pulsed 
+illumination 
+▪ Require the acquisition of three images for 
+autofocusing with a small overlapping portion  
+▪ Relatively short autofocusing range 
+Beam splitter array ▪ Real-time image-based autofocusing ▪ Require a secondary area camera 
+▪ Relatively short autofocusing range 
+Tilted sensor 
+ ▪ Real-time image-based autofocusing  
+▪ Fully compatible with linear and TDI image sensor  
+▪ Fast calculation via contrast curve  
+▪ One of the most successful techniques deployed in 
+commercially available WSI systems 
+ ▪ Require a secondary focusing sensor 
+▪ A transparent sample may lead to a wrong 
+autofocusing calculation since out-of-focus regions 
+have a higher contrast 
+Phase detection 
+ ▪ Real-time image-based autofocusing 
+▪ Can handle transparent specimens via a preset 
+offset of the focusing sensor  
+ ▪ Require additional camera(s) and relay optics for 
+the pinhole mask 
+▪ Precise alignment needed for the pinhole mask 
+▪ Low-pass filtering of the pinhole mask may affect 
+the accuracy of the correlation analysis  
+Dual-LED 
+illumination 
+ ▪ Real-time image-based autofocusing 
+▪ Can be implemented with continuous sample 
+motion 
+▪ Can handle transparent specimens  
+▪ Relatively long autofocusing range due to the use 
+of partially coherent dual-LED illumination 
+▪ Cost effective and compatible with most 
+automated microscope platforms 
+ ▪ Only work for regular 2D thin slides 
+ 
+Deep learning ▪ Allow single-shot autofocusing 
+▪ Require no additional optical hardware 
+ ▪ Relatively short virtual refocusing range 
+▪ Change of optical hardware may affect the 
+autofocusing performance  
+▪ The system may fail for new features or new types 
+of specimens that have not been trained before 
+Table 3. Summary and comparison of different autofocusing techniques. 
+ 
+In the medical realm, one strategy taken by the National Cancer Moonshot initiative to fight 
+cancer cooperatively is to create an image database for different cases and connect scientists and 
+This article is protected by copyright. All rights reserved.
+ 
+the air-glass interface and the second weaker peak corresponds to the sample-glass interface. Solid 
+and dashed lines are results for 100-µm and 200-µm pinhole. Increasing the confocal pinhole size 
+can broaden the width of the peaks as indicated by the dashed line in Figure 3. This adjustment 
+can reduce some unwanted interference speckles and facilitate the data analysis process. A two-
+stage operation was employed to perform the autofocusing process. The first stage, termed ‘long 
+peak detection search’, is to locate the strong peak via high-speed axial scanning of the objective 
+lens. With the location of the first strong peak, the position of the second peak can be estimated 
+by adding the thickness of the glass substrate. The second stage, termed ‘local peak search’, 
+performs precise peak search over a relatively short range.   
+ 
+ 
+Figure 3. An autofocusing system using confocal pinhole detection. Laser light is expanded and focused on the 
+substrate of the sample. The reflective light, highlighted in yellow, is passed through a confocal pinhole and detected 
+by the photodetector. Inset in the top right shows the measured intensity signals by axially scanning the objective lens 
+to different positions. The first strong peak corresponds to the air-glass interface and the second weaker peak 
+corresponds to the sample-glass interface. Solid and dashed lines are results for 100 µm and 200 µm pinhole. Modified 
+from Ref. 95. 
+ 
+While this confocal detection approach can perform precise autofocusing, its main drawback 
+is the requirement of axial scanning to get the trace curve shown in Figure 3. Another drawback is 
+This article is protected by copyright. All rights reserved.
+ 
+pathologists for online collaboration. Coupling an automated microscope system with a proper 
+autofocusing technique has the potential to convert various biological specimens into high-content 
+images and address the challenge of high-throughput microscopy.        
+Acknowledgments 
+Z. B. and C. G. contributed equally to this work. P. S. acknowledges the support of the Thermo 
+Fisher Scientific Fellowship. K. H. acknowledges the support of NSF 1809047. G. Z. 
+acknowledges the support of NSF 1700941 and NSF 2012140.  
+ 
+Data Availability Statement 
+Research Data are not shared. 
+ 
+References 
+[1] F. Ghaznavi, A. Evans, A. Madabhushi, M. Feldman, Annu. Rev. Pathol. 2013, 8, 331-359. 
+[2] C. Higgins, Biotech. Histochem. 2015, 90, 341-347. 
+[3] M. N. Gurcan, L. E. Boucheron, A. Can, A. Madabhushi, N. M. Rajpoot, B. Yener, IEEE Rev. 
+Biomed. Eng. 2009, 2, 147-171. 
+[4] M. B. Amin, F. L. Greene, S. B. Edge, C. C. Compton, J. E. Gershenwald, R. K. Brookland, 
+L. Meyer, D. M. Gress, D. R. Byrd, D. P. Winchester, CA Cancer J. Clin. 2017, 67, 93-99. 
+[5] R. Ferreira, B. Moon, J. Humphries, A. Sussman, J. Saltz, R. Miller, A. Demarzo, Proc AMIA 
+Annu Fall Symp, American Medical Informatics Association, 1997, 449 
+[6] M. C. Montalto, R. R. McKay, R. J. Filkins, J. Pathol. Inform. 2011, 2. 
+[7] A. J. Evans, T. W. Bauer, M. M. Bui, T. C. Cornish, H. Duncan, E. F. Glassy, J. Hipp, R. S. 
+McGee, D. Murphy, C. Myers, Arch. Pathol. Lab. Med. 2018, 142, 1383-1387. 
+[8] E. Abels, L. Pantanowitz, J. Pathol. Inform. 2017, 8. 
+[9] M. K. K. Niazi, A. V. Parwani, M. N. Gurcan, Lancet Oncol. 2019, 20, e253-e261. 
+[10] H. R. Tizhoosh, L. Pantanowitz, J. Pathol. Inform. 2018, 9. 
+[11] N. Radakovich, M. Nagy, A. Nazha, Networks 2020, 2, 6. 
+[12] N. Dimitriou, O. Arandjelović, P. D. Caie, Front. Med. 2019, 6. 
+[13] A. Janowczyk, A. Madabhushi, J. Pathol. Inform. 2016, 7. 
+[14] Y. Liu, K. Gadepalli, M. Norouzi, G. E. Dahl, T. Kohlberger, A. Boyko, S. Venugopalan, A. 
+Timofeev, P. Q. Nelson, G. S. Corrado, arXiv preprint arXiv:1703.02442 2017. 
+[15] P.-H. C. Chen, K. Gadepalli, R. MacDonald, Y. Liu, S. Kadowaki, K. Nagpal, T. Kohlberger, 
+J. Dean, G. S. Corrado, J. D. Hipp, Nat. Med. 2019, 25, 1453-1457. 
+This article is protected by copyright. All rights reserved.
+ 
+the orders of magnitude difference in strength for the two peaks. The weaker peak can easily be 
+overwhelmed by the first strong peak, especially for lower magnification objective lenses. In 
+Section 3.2, we will discuss a strategy to address the first drawback, i.e., to locate the first peak 
+position without performing axial scanning. In Section 3.3, we will discuss another strategy to 
+address both drawbacks, i.e., to reduce the signal strength from the first peak and to locate both 
+peaks without axial scanning.       
+3.2. Triangulation with oblique illumination  
+To locate the axial position of an interface without axial scanning, one can illuminate the sample 
+with a tilted incident angle and measure the lateral displacement of the reflected beam. The 
+triangulation concept for microscopy autofocusing can be dated back to the patent by Reinheimer 
+in 197396. In this patent, Reinheimer proposed to restrict a shaped illumination beam to occupy 
+only half of the pupil aperture cross-section. As such, the beam reflected from a surface will have 
+different lateral displacements when the sample surface is placed at different axial positions. The 
+reflected light from the sample surface is detected by two photoelectric transducers for differential 
+measurement. The differential signal detected by these two transducers is used to drive the focus 
+knob. For example, if the sample surface is placed at the in-focus position, the reflected light will 
+be directed to the boundary of the two transducers. The resulting differential signal is 0 and no 
+adjustment is needed. If the sample surface is positioned above the in-focus plane, the reflected 
+light will shift to one of the transducers. The differential signal is then used to drive down the 
+sample stage. Similarly, if the sample surface is positioned below the in-focus plane, the 
+differential signal from the two transducers drives up the sample stage. There are some further 
+refinements and developments of this original patent in the 1980s and 1990s97-104. These 
+developments are, in general, about how to better detect the beam size and the positional shift to 
+infer the defocus distance. Similar schemes have also been reported in more recent literatures105-
+110. 
+ This article is protected by copyright. All rights reserved.
+ 
+[16] J. D. Ianni, R. E. Soans, S. Sankarapandian, R. V. Chamarthi, D. Ayyagari, T. G. Olsen, M. 
+J. Bonham, C. C. Stavish, K. Motaparthi, C. J. Cockerell, Sci. Rep. 2020, 10, 1-12. 
+[17] J. D. Ianni, R. E. Soans, S. Sankarapandian, R. V. Chamarthi, D. Ayyagari, T. G. Olsen, M. 
+J. Bonham, C. C. Stavish, K. Motaparthi, C. J. Cockerell, arXiv preprint arXiv:1909.11212 2019. 
+[18] B. E. Bejnordi, M. Veta, P. J. Van Diest, B. Van Ginneken, N. Karssemeijer, G. Litjens, J. A. 
+Van Der Laak, M. Hermsen, Q. F. Manson, M. Balkenhol, JAMA 2017, 318, 2199-2210. 
+[19] J. R. Gilbertson, J. Ho, L. Anthony, D. M. Jukic, Y. Yagi, A. V. Parwani, BMC Clin. Pathol. 
+2006, 6, 4. 
+[20] C. Massone, H. P. Soyer, G. P. Lozzi, A. Di Stefani, B. Leinweber, G. Gabler, M. Asgari, R. 
+Boldrini, L. Bugatti, V. Canzonieri, Hum. Pathol. 2007, 38, 546-554. 
+[21] T. Kohlberger, Y. Liu, M. Moran, P.-H. C. Chen, T. Brown, J. D. Hipp, C. H. Mermel, M. C. 
+Stumpe, J. Pathol. Inform. 2019, 10, 39. 
+[22] F. C. Groen, I. T. Young, G. Ligthart, Cytometry A 1985, 6, 81-91. 
+[23] Y. Sun, S. Duthaler, B. J. Nelson, Microsc. Res. Tech. 2004, 65, 139-149. 
+[24] X. Liu, W. Wang, Y. Sun, J. Microsc. 2007, 227, 15-23. 
+[25] S. Yazdanfar, K. B. Kenny, K. Tasimi, A. D. Corwin, E. L. Dixon, R. J. Filkins, Opt. Express 
+2008, 16, 8670-8677. 
+[26] R. Redondo, G. Cristóbal, G. B. Garcia, O. Deniz, J. Salido, M. del Milagro Fernandez, J. 
+Vidal, J. C. Valdiviezo, R. Nava, B. Escalante-Ramírez, J. Biomed. Opt. 2012, 17, 036008. 
+[27] S. Pertuz, D. Puig, M. A. Garcia, Pattern Recognit 2013, 46, 1415-1432. 
+[28] W. Böcker, W. Rolf, W. Müller, C. Streffer, Phys. Med. Biol. 1997, 42, 1981. 
+[29] S. K. Nayar, Y. Nakagawa, IEEE Trans. Pattern Anal. Mach. Intell. 1994, 16, 824-831. 
+[30] Z. Wang, M. Lei, B. Yao, Y. Cai, Y. Liang, Y. Yang, X. Yang, H. Li, D. Xiong, Biomed. Opt. 
+Express 2015, 6, 4353-4364. 
+[31] J. F. Brenner, B. S. Dew, J. B. Horton, T. King, P. W. Neurath, W. D. Selles, J. Histochem. 
+Cytochem. 1976, 24, 100-111. 
+[32] T. Yeo, S. Ong, R. Sinniah, Image. Vis. Comput 1993, 11, 629-639. 
+[33] O. Osibote, R. Dendere, S. Krishnan, T. Douglas, J. Microsc. 2010, 240, 155-163. 
+[34] M. Subbarao, T.-S. Choi, A. Nikzad, Opt. Eng. 1993, 32, 2824-2837. 
+[35] M. J. Russell, T. S. Douglas, 2007 29th Annual International Conference of the IEEE 
+Engineering in Medicine and Biology Society, IEEE, 2007, 3489-3492 
+[36] J. M. Geusebroek, F. Cornelissen, A. W. Smeulders, H. Geerts, Cytometry A 2000, 39, 1-9. 
+[37] G. Yang, B. J. Nelson, Proceedings 2003 IEEE/RSJ International Conference on Intelligent 
+Robots and Systems IEEE, 2003, 2143-2148 
+[38] G. Yang, B. J. Nelson, 2003 IEEE International Conference on Robotics and Automation, 
+IEEE, 2003, 3200-3206 
+[39] H. Xie, W. Rong, L. Sun, Microsc. Res. Tech. 2007, 70, 987-995. 
+[40] M. Bravo-Zanoguera, B. v. Massenbach, A. L. Kellner, J. H. Price, Rev. Sci. Instrum. 1998, 
+69, 3966-3977. 
+[41] J. H. Price, D. A. Gough, Cytometry A 1994, 16, 283-297. 
+This article is protected by copyright. All rights reserved.
+ 
+Figure 4 shows the adoption of the triangulation idea in a modern microscope system, marketed 
+as Nikon Perfect Focus System (PFS)111. This system maintains focus by detecting and tracking 
+the position of the coverslip surface in real-time. It employs a near-infrared 870-nm LED as the 
+light source and a linear CCD sensor as the detector (other detectors such as four-quant photodiode 
+and area sensor can also be used here). Predefined by the user is an offset between the reference 
+plane and the axial location of the desired focused image. Different from the original patent by 
+Reinheimer, the PFS system introduces two offset adjustment lenses in Figure 4 to maintain the 
+focus at the desired positional offset from the coverslip surface. When the user changes the offset 
+distance, the distance of the two offset adjustment lenses changes, resulting in a shift of the line 
+position detected by linear CCD (inset of Figure 4). The positional shift generates a signal to move 
+the objective lens along the axial direction until the line position is centered at the linear CCD 
+again.  
+    
+ This article is protected by copyright. All rights reserved.
+ 
+[42] M. A. Oliva, M. Bravo-Zanoguera, J. H. Price, Appl. Opt. 1999, 38, 638-646. 
+[43] F. Shen, L. Hodgson, K. Hahn in Digital autofocus methods for automated microscopy, Vol. 
+414, Elsevier, 2006, pp.620-632. 
+[44] M. E. Bravo-Zanoguera, C. A. Laris, L. K. Nguyen, M. Oliva, J. H. Price, J. Biomed. Opt. 
+2007, 12, 034011. 
+[45] D. J. Field, N. Brady, Vision Res. 1997, 37, 3367-3383. 
+[46] M.-A. Bray, A. N. Fraser, T. P. Hasaka, A. E. Carpenter, J. Biomol. Screen. 2012, 17, 266-
+274. 
+[47] D. Vollath, J. Microsc. 1987, 147, 279-288. 
+[48] D. Vollath, J. Microsc. 1988, 151, 133-146. 
+[49] A. Santos, C. Ortiz de Solórzano, J. J. Vaquero, J. M. Pena, N. Malpica, F. del Pozo, J. 
+Microsc. 1997, 188, 264-272. 
+[50] L. Firestone, K. Cook, K. Culp, N. Talsania, K. Preston Jr, Cytometry A 1991, 12, 195-206. 
+[51] M. Zeder, J. Pernthaler, Cytometry A 2009, 75, 781-788. 
+[52] M. L. Mendelsohn, B. H. Mayall, Comput. Biol. Med. 1972, 2, 137-150. 
+[53] U. Schnars, C. Falldorf, J. Watson, W. Jüptner in Digital holography, Vol., Springer, 2015, 
+pp.39-68. 
+[54] B. Kemper, G. Von Bally, Appl. Opt. 2008, 47, A52-A61. 
+[55] J. R. Fienup, Appl. Opt. 1982, 21, 2758-2769. 
+[56] G. Zheng, R. Horstmeyer, C. Yang, Nat. Photon. 2013, 7, 739. 
+[57] J. M. Rodenburg, Adv. Imaging Electron Phys. 2008, 150, 87-184. 
+[58] J. Rodenburg, A. Maiden in Ptychography, Vol., Springer, 2019, pp.2-2. 
+[59] X. Ou, G. Zheng, C. Yang, Opt. Express 2014, 22, 4960-4972. 
+[60] P. Song, S. Jiang, H. Zhang, X. Huang, Y. Zhang, G. Zheng, APL Photonics 2019, 4, 050802. 
+[61] A. J. Williams, J. Chung, X. Ou, G. Zheng, S. Rawal, Z. Ao, R. Datar, C. Yang, R. J. Cote, J. 
+Biomed. Opt. 2014, 19, 066007. 
+[62] S. Dong, R. Horstmeyer, R. Shiradkar, K. Guo, X. Ou, Z. Bian, H. Xin, G. Zheng, Opt. 
+Express 2014, 22, 13586-13599. 
+[63] Z. Bian, S. Jiang, P. Song, H. Zhang, P. Hoveida, K. Hoshino, G. Zheng, J. Phys. D: Appl. 
+Phys. 2019, 53, 014005. 
+[64] P. Song, S. Jiang, H. Zhang, Z. Bian, C. Guo, K. Hoshino, G. Zheng, Opt. Lett. 2019, 44, 
+3645-3648. 
+[65] S. Jiang, J. Zhu, P. Song, C. Guo, Z. Bian, R. Wang, Y. Huang, S. Wang, H. Zhang, G. 
+Zheng, Lab Chip 2020, 20, 1058-1065. 
+[66] X. He, Z. Jiang, Y. Kong, S. Wang, C. Liu, Opt. Commun. 2020, 459, 125057. 
+[67] C. Shen, A. C. S. Chan, J. Chung, D. E. Williams, A. Hajimiri, C. Yang, Opt. Express 2019, 
+27, 24923-24937. 
+[68] J. Xu, Y. Kong, Z. Jiang, S. Gao, L. Xue, F. Liu, C. Liu, S. Wang, Appl. Opt. 2019, 58, 3003-
+3012. 
+[69] P. Langehanenberg, G. von Bally, B. Kemper, 3D Research 2011, 2, 4. 
+This article is protected by copyright. All rights reserved.
+ 
+ 
+Figure 4. The Nikon Perfect Focus System. Light from an infrared LED is shaped by a line aperture and a half-moon 
+mask for illuminating the sample substrate at a tilted angle. The reflected light is detected by a linear CCD. Inset 
+shows the detected line traces when the sample substrate is scanned to different defocused positions. Two offset 
+adjustment lenses are used to maintain the focus at the desired positional offset from the coverslip surface. Modified 
+from Ref. 111.    
+ 
+The PFS system is mainly designed to image living cells housed in imaging chambers equipped 
+with a standard coverslip. For fixed specimens like tissue slides that are mounted in a high 
+refractive index medium (which closely matches that of the coverslip), the refraction index 
+difference may not generate sufficient signal to detect the interface surface. Likewise, tissue slides 
+with strong absorption profiles often scatter a considerable amount of light, leading to excessive 
+This article is protected by copyright. All rights reserved.
